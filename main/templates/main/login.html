@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}" />
+    <title>Sign In</title>
+  </head>
+  <body>
+    <div>
+      <div class="login-box">
+        <div class="login-head">
+          <span>Welcome</span>
+        </div>
+        <form method="post" action="#" class="login-form">
+            {% csrf_token %}
+          <label for="username">用户名:</label>
+          <input type="text" id="username" name="username" required / tabindex="1">
+          <div style="display: flex; justify-content: space-between;align-items: center;">
+            <label for="password">密码:</label>
+            <a href="#" style="padding: auto">忘记密码?</a>
+          </div>
+          <input type="password" id="password" name="password" required / tabindex="2">
+          <button type="submit" class="btn btn-success btn-login" tabindex="3">登录</button>
+        </form>
+        <div class="hint-box">
+          <span>还没有账户?</span>
+          <a href="{% url 'main:register' %}">注册用户</a>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+</html>

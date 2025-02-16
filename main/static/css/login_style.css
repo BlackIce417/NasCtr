@@ -1,0 +1,48 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.login-box { 
+    width: 400px;
+    margin: 50px auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.login-box .login-head {
+    text-align: center;
+    padding: 20px 0 10px 0;
+}
+
+.login-box .login-head span{
+    margin: 0px auto;
+    font-weight: bold;
+}
+
+.login-form label{
+    padding: 5px 0;
+}
+
+.login-form input {
+    display: block;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px, solid #ccc;
+}
+
+.btn-login {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.hint-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+}
