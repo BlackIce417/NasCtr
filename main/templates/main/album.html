@@ -1,26 +1,38 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/album.css' %}" />
     <title>Album</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <nav>
-            <span>{{ album.name }}</span>
-            <span>{{ album.host.username }}</span>
-        </nav>
-        <hr>
-        <form action="#" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% comment %} <input type="file" name="userupload">
-            <button type="submit">保存</button> {% endcomment %}
-            {{pic_form.as_p}}
-            <button type="submit">保存</button>
-        </form>
+      <nav>
+        <span>{{ album.name }}</span>
+        <span>{{ album.host.username }}</span>
+      </nav>
+      <hr />
+      <form action="#" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% comment %} <input type="file" name="userupload" />
+        <button type="submit">保存</button> {% endcomment %}
+        {{ pic_form.as_p }}
+        <button type="submit">保存</button>
+      </form>
+      <hr />
+      <div class="pictures-gallery">
+        {% for picture in pictures %}
+            <div class="picture-item" style="background-image: url({{ picture.image.url }});">
+                <div class="picture-btn-group">
+                    <a href="#" class='view-picture'>查看</a>
+                    <a href="#" class='delete-picture'>删除</a>
+                </div>
+            </div>
+        {% endfor %}
+      </div>
     </div>
-</body>
+  </body>
 </html>

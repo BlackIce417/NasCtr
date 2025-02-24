@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import QuerySet
 
 from .models import *
 from .forms import *
@@ -30,8 +31,11 @@ def _logout(request):
 @login_required(login_url="/login/")
 def index(request):
     user = request.user
-    album = Album.objects.filter(host=user)
-    context = {"user": user, "albums": album}
+    album_list = Album.objects.filter(host=user)
+    album = []
+    for a in album_list:
+        album.append({"album": a, "pictures": Picture.objects.filter(album=a).order_by("-uploaded_at")})
+    context = {"user": user, "albums": album, }
     return render(request, "main/index.html", context)
 
 
@@ -85,5 +89,10 @@ def album(request, album_id):
         else:
             return HttpResponse("Upload fail")
     form = PictureForm()
-    context = {"album": album, "pic_form": form}
+    pictures = Picture.objects.filter(album=album)
+    context = {"album": album, "pic_form": form, "pictures": pictures}
     return render(request, "main/album.html", context)
+
+
+def delete_picture(request):
+    pass
