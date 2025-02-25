@@ -10,7 +10,7 @@
   </head>
   <body>
     <div class="container">
-      <nav>
+      <nav class="album-nav">
         <span>{{ album.name }}</span>
         <span>{{ album.host.username }}</span>
       </nav>
@@ -28,8 +28,8 @@
             <div class="picture-item" style="background-image: url({{ picture.image.url }});">
                 <div class="picture-btn-group">
                     <a href="#" class='view-picture'>查看</a>
-                    <a href="#" class='delete-picture'>删除</a>
-                </div>
+                    <a href="{% url 'main:delete-picture' %}?picture={{picture.id}}" class='delete-picture'>删除</a>
+                  </div>
             </div>
         {% endfor %}
       </div>

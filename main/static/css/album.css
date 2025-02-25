@@ -1,3 +1,8 @@
+.album-nav {
+    display: flex;
+    justify-content: space-between;
+}
+
 .pictures-gallery {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 每行4列 */

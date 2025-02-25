@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -95,4 +95,12 @@ def album(request, album_id):
 
 
 def delete_picture(request):
-    pass
+    picture_id = request.GET.get("picture")
+    # print(f"{picture_id}")
+    try:
+        picture = Picture.objects.get(id=picture_id)
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
+    picture.delete()
+    referer_url = request.META.get("HTTP_REFERER", "/")
+    return HttpResponseRedirect(referer_url)

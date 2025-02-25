@@ -81,5 +81,12 @@ class Picture(models.Model):
     #         self.name = HashUploadTo().get_file_hash(self.image,)
     #     super().save(*args, **kwargs)
 
+    def delete(self, using = None, keep_parents = False):
+        if self.image:
+            image_path = self.image.path
+            if os.path.isfile(image_path):
+                os.remove(image_path)
+        return super().delete(using, keep_parents)
+
     class Meta:
         verbose_name = '图片'
