@@ -11,7 +11,30 @@
   <body>
     <div class="container">
       <nav class="album-nav">
-        <span>{{ album.name }}</span>
+        <div class="album-info">
+          <span>{{ album.name }}</span>
+          <span>{{ album.description }}</span>
+          <button class="btn-edit-albuminfo">修改</button>
+          <form id="overlay" action="{% url 'main:edit-album' %}?album={{album.id}}" method="post">
+            {% csrf_token %}
+            <div class="popup">
+              <p class="popup_title">编辑相册信息</p>
+              <div class="albume-name">
+                <label for="name">相册名称:</label>
+                <input type="text" id="name" name="name" value="{{album.name}}">
+              </div>
+              <div class="albume-description">
+                <label for="description">备注</label>
+                <input type="text" id="description" name="description" value="{{album.name}}">
+              </div>
+              <div class="popup_btn">
+                <button class="cancelBtn" onclick="hidePopup()" type="button">取消</button>
+                <button class="confirmBtn" onclick="hidePopup()" type="submit">保存</button>
+              </div>
+            </div>
+          </form>
+          <a href="{% url 'main:usercenter' %}">返回</a>
+        </div>
         <span>{{ album.host.username }}</span>
       </nav>
       <hr />
@@ -20,7 +43,7 @@
         {% comment %} <input type="file" name="userupload" />
         <button type="submit">保存</button> {% endcomment %}
         {{ pic_form.as_p }}
-        <button type="submit">保存</button>
+        <button class="btn btn-primary" type="submit">保存</button>
       </form>
       <hr />
       <div class="pictures-gallery">
@@ -35,4 +58,6 @@
       </div>
     </div>
   </body>
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js/album.js' %}"></script>
 </html>

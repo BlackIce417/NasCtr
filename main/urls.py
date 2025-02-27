@@ -14,7 +14,8 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('create_album/', views.create_album, name='create_album'),
     path('albums/<int:album_id>', views.album, name='albums'),
-    path('deletep', views.delete_picture, name="delete-picture")
+    path('deletep', views.delete_picture, name="delete-picture"),
+    path('editalbum', views.edit_album, name="edit-album"),
 ]
 
 if settings.DEBUG:

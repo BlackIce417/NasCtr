@@ -34,8 +34,16 @@ def index(request):
     album_list = Album.objects.filter(host=user)
     album = []
     for a in album_list:
-        album.append({"album": a, "pictures": Picture.objects.filter(album=a).order_by("-uploaded_at")})
-    context = {"user": user, "albums": album, }
+        album.append(
+            {
+                "album": a,
+                "pictures": Picture.objects.filter(album=a).order_by("-uploaded_at"),
+            }
+        )
+    context = {
+        "user": user,
+        "albums": album,
+    }
     return render(request, "main/index.html", context)
 
 
@@ -74,14 +82,14 @@ def create_album(request):
 @login_required(login_url="/login/")
 def album(request, album_id):
     album = Album.objects.get(host=request.user, id=album_id)
-    if request.method == 'POST':
+    if request.method == "POST":
         pic_upload_form = PictureForm(request.POST, request.FILES)
         print(request.POST)
         if pic_upload_form.is_valid():
             picture = Picture(
-                name = pic_upload_form.cleaned_data["image"].name,
-                description = pic_upload_form.cleaned_data["description"],
-                image = pic_upload_form.cleaned_data["image"],
+                name=pic_upload_form.cleaned_data["image"].name,
+                description=pic_upload_form.cleaned_data["description"],
+                image=pic_upload_form.cleaned_data["image"],
                 album=album,
             )
             picture.save()
@@ -94,6 +102,7 @@ def album(request, album_id):
     return render(request, "main/album.html", context)
 
 
+@login_required(login_url="/login/")
 def delete_picture(request):
     picture_id = request.GET.get("picture")
     # print(f"{picture_id}")
@@ -104,3 +113,19 @@ def delete_picture(request):
     picture.delete()
     referer_url = request.META.get("HTTP_REFERER", "/")
     return HttpResponseRedirect(referer_url)
+
+
+@login_required(login_url="/login/")
+def edit_album(request):
+    if request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+        print(f"{request}")
+        try:
+            album = Album.objects.get(id=request.GET.get("album"))
+        except Exception as e:
+            return HttpResponse(f"Error: {e}")
+        album.name = name
+        album.description = description
+        album.save()
+    return redirect("main:albums", album_id=album.id)
