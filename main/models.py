@@ -1,6 +1,8 @@
+import shutil
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
+from django.forms import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.conf import settings
 import os
@@ -20,7 +22,9 @@ class Album(models.Model):
     description = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建于')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新于')
-
+    cover = models.ForeignKey('Picture', on_delete=models.SET_NULL, blank=True, null=True, related_name='cover_for', verbose_name='封面')
+    cover_type = models.CharField(choices=[('default', '默认封面'), ('custom', '自定义封面')], default='default', max_length=10, verbose_name='封面类型')
+    
     def __str__(self):
         return self.name
     
@@ -33,6 +37,24 @@ class Album(models.Model):
         album_folder = os.path.join(settings.MEDIA_ROOT, 'album', str(self.id))
         if not os.path.exists(album_folder):
             os.makedirs(album_folder)
+
+        if self.cover:
+            if self.cover.album != self:
+                raise ValidationError("封面图片必须是本相册中的图片。")
+        elif not self.cover:
+            default_cover_path = os.path.join(settings.MEDIA_ROOT, 'album/default', 'default_cover.png')
+            if os.path.exists(default_cover_path):
+                self.cover = Picture.objects.create(image='album/default/default_cover.png', name='默认封面', album=self)
+                print(f"cover={self.cover.id}")
+                super().save(*args, **kwargs)
+            else:
+                raise ValidationError("默认封面图片丢失。")
+            
+    def delete(self, using=None, keep_parents=False):
+        album_folder = os.path.join(settings.MEDIA_ROOT, 'album', str(self.id))
+        if os.path.exists(album_folder):
+            shutil.rmtree(album_folder)
+        return super().delete(using, keep_parents)
     
     class Meta: 
         verbose_name = "相册"
@@ -70,7 +92,7 @@ class Picture(models.Model):
     name = models.CharField(max_length=100, verbose_name='图片名称')
     image = models.ImageField(upload_to=HashUploadTo(), verbose_name='图片')
     description = models.TextField(blank=True, null=True, verbose_name='Description')
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='photos', verbose_name='相册')
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='pictures', verbose_name='相册')
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='上传于')
 
     def __str__(self):
@@ -90,3 +112,5 @@ class Picture(models.Model):
 
     class Meta:
         verbose_name = '图片'
+
+

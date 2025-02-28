@@ -33,13 +33,17 @@ def index(request):
     user = request.user
     album_list = Album.objects.filter(host=user)
     album = []
-    for a in album_list:
-        album.append(
-            {
-                "album": a,
-                "pictures": Picture.objects.filter(album=a).order_by("-uploaded_at"),
-            }
-        )
+    if album_list is not None:
+        for a in album_list:
+            album.append(
+                {
+                    "album": a,
+                    "album_cover": a.cover,
+                    "pictures": Picture.objects.filter(album=a).exclude(cover_type="default").order_by(
+                        "-uploaded_at"
+                    ),
+                }
+            )
     context = {
         "user": user,
         "albums": album,
@@ -130,3 +134,8 @@ def edit_album(request):
         album.save()
     return redirect("main:albums", album_id=album.id)
 
+
+def delete_album(request):
+    album = Album.objects.get(id=request.GET.get("album"))
+    album.delete()
+    return redirect("main:usercenter")

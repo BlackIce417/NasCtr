@@ -36,21 +36,24 @@
           </div>
         </nav>
       </head>
-      <hr>
+      <hr />
       <div>
         <a href="{% url 'main:create_album' %}" class="btn btn-primary">新建相册</a>
-        <hr>
-        {% for album in albums %}
-          <div class="card" style="width: 18rem;">
-            <img src="{{album.pictures.first.image.url}}" class="card-img-top card-img-1" alt="..." />
-            <div class="card-body">
-              <h5 class="card-title">{{ album.album.name }}</h5>
-              <p class="card-text">{{ album.album.description }}</p>
-              <small>{{ album.album.created_at|date:'Y-m-d H:i' }}</small>
-              <a href="{% url 'main:albums' album.album.id %}" class="btn btn-primary">查看</a>
+        <hr />
+        <div class="album-list">
+          {% for album in albums %}
+            <div class="card" style="width: 18rem;">
+              <img src="{{ album.album.cover.image.url }}" class="card-img-top card-img-1" alt="..." />
+              <div class="card-body">
+                <h5 class="card-title">{{ album.album.name }}</h5>
+                <p class="card-text">{{ album.album.description }}</p>
+                <small>{{ album.album.created_at|date:'Y-m-d H:i' }}</small>
+                <a href="{% url 'main:albums' album.album.id %}" class="btn btn-primary">查看</a>
+                <a href="{% url 'main:delete-album' %}?album={{album.album.id}}" class="btn btn-danger">删除</a>
+              </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </body>

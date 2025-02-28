@@ -25,3 +25,12 @@ nav a {
     background-color: transparent;
     padding: 0;
 }
+
+.album-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 每行4列 */
+    gap: 16px;
+    /* 图片间的间距 */
+}
+

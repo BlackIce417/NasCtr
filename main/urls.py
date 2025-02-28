@@ -13,6 +13,7 @@ urlpatterns = [
     path('usercenter/', views.index, name='usercenter'),
     path('register/', views.register, name='register'),
     path('create_album/', views.create_album, name='create_album'),
+    path('delete_album/', views.delete_album, name='delete-album'),
     path('albums/<int:album_id>', views.album, name='albums'),
     path('deletep', views.delete_picture, name="delete-picture"),
     path('editalbum', views.edit_album, name="edit-album"),
