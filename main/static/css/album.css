@@ -1,6 +1,7 @@
 .album-nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 /* 遮罩层 */
@@ -116,4 +117,8 @@
 .picture-item:hover .picture-btn-group {
     display: flex;
     opacity: 1;
+}
+
+.upload-area {
+    display: none;
 }

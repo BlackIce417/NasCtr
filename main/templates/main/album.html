@@ -14,7 +14,7 @@
         <div class="album-info">
           <span>{{ album.name }}</span>
           <span>{{ album.description }}</span>
-          <button class="btn-edit-albuminfo">修改</button>
+          <button class="btn btn-edit-albuminfo">修改</button>
           <form id="overlay" action="{% url 'main:edit-album' %}?album={{album.id}}" method="post">
             {% csrf_token %}
             <div class="popup">
@@ -33,18 +33,22 @@
               </div>
             </div>
           </form>
-          <a href="{% url 'main:usercenter' %}">返回</a>
+          <a href="{% url 'main:usercenter' %}" class="btn-back">返回</a>
         </div>
-        <span>{{ album.host.username }}</span>
+        <span style="text-align: center;">{{ album.host.username }}</span>
       </nav>
-      <hr />
-      <form action="#" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% comment %} <input type="file" name="userupload" />
-        <button type="submit">保存</button> {% endcomment %}
-        {{ pic_form.as_p }}
-        <button class="btn btn-primary" type="submit">保存</button>
-      </form>
+      <hr style="margin-top: 0;" />
+      <div class="upload-area">
+        <form action="#" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% comment %} <input type="file" name="userupload" />
+          <button type="submit">保存</button> {% endcomment %}
+          {{ pic_form.as_p }}
+          <button class="btn btn-primary" type="submit">保存</button>
+          <button class="btn btn-danger" id="btn-cancelupload" type="button">取消</button>
+        </form>
+      </div>
+      <button class="btn btn-outline-dark" id="btn-uplaodimg" type="button">上传图片</button>
       <hr />
       <div class="pictures-gallery">
         {% for picture in pictures %}

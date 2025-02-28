@@ -129,3 +129,4 @@ def edit_album(request):
         album.description = description
         album.save()
     return redirect("main:albums", album_id=album.id)
+
