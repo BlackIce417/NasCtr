@@ -17,7 +17,7 @@ urlpatterns = [
     path('albums/<int:album_id>', views.album, name='albums'),
     path('deletep', views.delete_picture, name="delete-picture"),
     path('editalbum', views.edit_album, name="edit-album"),
-    path('usercenter/load-pictures', views.load_pictures, name="load-pictures"),
+    path('usercenter/load-pictures/', views.load_pictures, name="load-pictures"),
 
 ]
 

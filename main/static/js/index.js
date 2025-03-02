@@ -1,12 +1,12 @@
 $(document).ready(function () {
-    $("#load-pictures").click(function() {
-        event.preventDefault();
+    $("#load-pictures").click(function(e) {
+        e.preventDefault();
         $.ajax({
-            url: "load-pictures",
+            url: loadPicturesUrl,
             method: "GET",
             success: function (data) {
                 $("#picture-list").html(data);
-                
+                console.log(data);
             },
             error: function (error) {
                 console.log(error);
