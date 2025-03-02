@@ -39,7 +39,7 @@ def index(request):
                 {
                     "album": a,
                     "album_cover": a.cover,
-                    "pictures": Picture.objects.filter(album=a).exclude(cover_type="default").order_by(
+                    "pictures": Picture.objects.filter(album=a).exclude(album__cover_type="default").order_by(
                         "-uploaded_at"
                     ),
                 }

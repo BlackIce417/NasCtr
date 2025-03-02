@@ -31,10 +31,10 @@ class Album(models.Model):
     
     def save(self, *args, **kwargs):
         # 先保存 Album 实例，以生成 ID
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs) 
 
         # 创建对应的文件夹
-        album_folder = os.path.join(settings.MEDIA_ROOT, 'album', str(self.id))
+        album_folder = os.path.join(settings.MEDIA_ROOT, 'main/album', str(self.id))
         if not os.path.exists(album_folder):
             os.makedirs(album_folder)
 
@@ -42,16 +42,17 @@ class Album(models.Model):
             if self.cover.album != self:
                 raise ValidationError("封面图片必须是本相册中的图片。")
         elif not self.cover:
-            default_cover_path = os.path.join(settings.MEDIA_ROOT, 'album/default', 'default_cover.png')
+            default_cover_path = os.path.join(settings.MEDIA_ROOT, 'main/album/default', 'default_cover.jpg')
+            print(default_cover_path)
             if os.path.exists(default_cover_path):
-                self.cover = Picture.objects.create(image='album/default/default_cover.png', name='默认封面', album=self)
-                print(f"cover={self.cover.id}")
-                super().save(*args, **kwargs)
+                self.cover = Picture.objects.create(image='main/album/default/default_cover.jpg', name='默认封面', album=self)
+                # print(f"cover={self.cover.id}")
+                super().save(update_fields=["cover"])
             else:
                 raise ValidationError("默认封面图片丢失。")
             
     def delete(self, using=None, keep_parents=False):
-        album_folder = os.path.join(settings.MEDIA_ROOT, 'album', str(self.id))
+        album_folder = os.path.join(settings.MEDIA_ROOT, 'main/album', str(self.id))
         if os.path.exists(album_folder):
             shutil.rmtree(album_folder)
         return super().delete(using, keep_parents)
