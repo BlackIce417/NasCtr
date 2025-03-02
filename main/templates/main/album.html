@@ -15,17 +15,17 @@
           <span>{{ album.name }}</span>
           <span>{{ album.description }}</span>
           <button class="btn btn-edit-albuminfo">修改</button>
-          <form id="overlay" action="{% url 'main:edit-album' %}?album={{album.id}}" method="post">
+          <form id="overlay" action="{% url 'main:edit-album' %}?album={{ album.id }}" method="post">
             {% csrf_token %}
             <div class="popup">
               <p class="popup_title">编辑相册信息</p>
               <div class="albume-name">
                 <label for="name">相册名称:</label>
-                <input type="text" id="name" name="name" value="{{album.name}}">
+                <input type="text" id="name" name="name" value="{{ album.name }}" />
               </div>
               <div class="albume-description">
                 <label for="description">备注</label>
-                <input type="text" id="description" name="description" value="{{album.name}}">
+                <input type="text" id="description" name="description" value="{{ album.name }}" />
               </div>
               <div class="popup_btn">
                 <button class="cancelBtn" onclick="hidePopup()" type="button">取消</button>
@@ -52,16 +52,24 @@
       <hr />
       <div class="pictures-gallery">
         {% for picture in pictures %}
-            <div class="picture-item" style="background-image: url({{ picture.image.url }});">
-                <div class="picture-btn-group">
-                    <a href="#" class='view-picture'>查看</a>
-                    <a href="{% url 'main:delete-picture' %}?picture={{picture.id}}" class='delete-picture'>删除</a>
-                  </div>
+          <div class="picture-item" style="background-image: url({{ picture.image.url }});">
+            <div class="btn-dropdown dropdown">
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></button>
+              <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+                <li>
+                  <a class="dropdown-item" href="#">编辑</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{picture.id}}">删除</a>
+                </li>
+              </ul>
             </div>
+          </div>
         {% endfor %}
       </div>
     </div>
   </body>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/album.js' %}"></script>
 </html>

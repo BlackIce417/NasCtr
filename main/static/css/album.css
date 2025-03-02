@@ -74,48 +74,27 @@
 .picture-item {
     width: 100%;
     aspect-ratio: 4/3;
-    display: inline-block;
+    display: flex;
     border: 1px #f1f1f1 solid;
     background-repeat: no-repeat;
     background-origin: border-box;
     background-size: cover;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
-.picture-item .picture-btn-group {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f1f1f1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.picture-item .picture-btn-group a {
-    text-decoration: none;
-    margin: 5px;
+.picture-item:hover {
     cursor: pointer;
 }
 
-.picture-item .picture-btn-group .view-picture {
-    background-color: rgb(17, 0, 255);
-    color: #ffffff;
+.picture-item .btn-dropdown {
+    display: block;
+    margin-left: auto;
 
 }
 
-.picture-item .picture-btn-group .delete-picture {
-    background-color: #ff0000;
-    color: #ffffff;
-}
-
-.picture-item:hover .picture-btn-group {
-    display: flex;
+.picture-item:hover .btn-dropdown {
+    display: block;
     opacity: 1;
 }
 

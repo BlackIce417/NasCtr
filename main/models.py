@@ -45,7 +45,7 @@ class Album(models.Model):
             default_cover_path = os.path.join(settings.MEDIA_ROOT, 'main/album/default', 'default_cover.jpg')
             print(default_cover_path)
             if os.path.exists(default_cover_path):
-                self.cover = Picture.objects.create(image='main/album/default/default_cover.jpg', name='默认封面', album=self)
+                self.cover = Picture.objects.create(image='main/album/default/default_cover.jpg', name='默认封面', album=self, picture_type="default_cover")
                 # print(f"cover={self.cover.id}")
                 super().save(update_fields=["cover"])
             else:
@@ -55,6 +55,7 @@ class Album(models.Model):
         album_folder = os.path.join(settings.MEDIA_ROOT, 'main/album', str(self.id))
         if os.path.exists(album_folder):
             shutil.rmtree(album_folder)
+        Picture.objects.filter(album=self, picture_type="default_cover").delete()
         return super().delete(using, keep_parents)
     
     class Meta: 
@@ -95,7 +96,8 @@ class Picture(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name='Description')
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='pictures', verbose_name='相册')
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='上传于')
-
+    picture_type = models.CharField(choices=[("user_upload", "用户上传"), ("default_cover", "默认相册封面")], default="user_upload", max_length=50)
+    
     def __str__(self):
         return self.name
     
@@ -106,8 +108,10 @@ class Picture(models.Model):
 
     def delete(self, using = None, keep_parents = False):
         if self.image:
+            if self.picture_type == "default_cover":
+                return
             image_path = self.image.path
-            if os.path.isfile(image_path):
+            if os.path.isfile(image_path) and self.picture_type != "default_cover":
                 os.remove(image_path)
         return super().delete(using, keep_parents)
 

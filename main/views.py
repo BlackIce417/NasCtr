@@ -39,11 +39,11 @@ def index(request):
                 {
                     "album": a,
                     "album_cover": a.cover,
-                    "pictures": Picture.objects.filter(album=a).exclude(album__cover_type="default").order_by(
-                        "-uploaded_at"
-                    ),
+                    "pictures": Picture.objects.filter(album=a)
+                    .order_by("-uploaded_at"),
                 }
             )
+
     context = {
         "user": user,
         "albums": album,
@@ -88,7 +88,7 @@ def album(request, album_id):
     album = Album.objects.get(host=request.user, id=album_id)
     if request.method == "POST":
         pic_upload_form = PictureForm(request.POST, request.FILES)
-        print(request.POST)
+        # print(request.POST)
         if pic_upload_form.is_valid():
             picture = Picture(
                 name=pic_upload_form.cleaned_data["image"].name,
@@ -101,7 +101,7 @@ def album(request, album_id):
         else:
             return HttpResponse("Upload fail")
     form = PictureForm()
-    pictures = Picture.objects.filter(album=album)
+    pictures = Picture.objects.filter(album=album).exclude(picture_type="default_cover").order_by("-uploaded_at")
     context = {"album": album, "pic_form": form, "pictures": pictures}
     return render(request, "main/album.html", context)
 
