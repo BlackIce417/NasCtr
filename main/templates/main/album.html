@@ -53,11 +53,11 @@
       <div class="pictures-gallery">
         {% for picture in pictures %}
           <div class="picture-item" style="background-image: url({{ picture.image.url }});">
-            <div class="btn-dropdown dropdown">
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <div class="dropdown-area dropdown dropdown-menu-end">
+              <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"></button>
               <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
                 <li>
-                  <a class="dropdown-item" href="#">编辑</a>
+                  <button class="dropdown-item" >编辑</button>
                 </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{picture.id}}">删除</a>

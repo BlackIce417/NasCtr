@@ -134,8 +134,16 @@ def edit_album(request):
         album.save()
     return redirect("main:albums", album_id=album.id)
 
-
+@login_required(login_url="/login/")
 def delete_album(request):
     album = Album.objects.get(id=request.GET.get("album"))
     album.delete()
     return redirect("main:usercenter")
+
+@login_required(login_url="/login/")
+def load_pictures(request):
+    album = Album.objects.get(host=request.user,)
+    pictures = Picture.objects.filter(album=album, picture_type="user_upload").order_by("-uploaded_at")
+    context = {"pictures": pictures}
+    print(f"{pictures}")
+    return render(request, "main/images_list.html", context)

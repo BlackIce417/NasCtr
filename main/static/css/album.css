@@ -74,7 +74,7 @@
 .picture-item {
     width: 100%;
     aspect-ratio: 4/3;
-    display: flex;
+    display: inline-block;
     border: 1px #f1f1f1 solid;
     background-repeat: no-repeat;
     background-origin: border-box;
@@ -87,15 +87,20 @@
     cursor: pointer;
 }
 
-.picture-item .btn-dropdown {
-    display: block;
-    margin-left: auto;
-
+.picture-item .dropdown-area {
+    position: absolute;
+    display: none;
+    right: 0;
 }
 
-.picture-item:hover .btn-dropdown {
-    display: block;
-    opacity: 1;
+.picture-item .dropdown-area .btn-dropdown {
+    border: none;
+    background-color: #ffffff;
+}
+
+.picture-item:hover .dropdown-area {
+    display: flex;
+    /* opacity: 1; */
 }
 
 .upload-area {

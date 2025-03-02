@@ -34,3 +34,22 @@ nav a {
     /* 图片间的间距 */
 }
 
+.picture-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 每行4列 */
+    gap: 16px;
+    /* 图片间的间距 */
+}
+
+.picture-item {
+    width: 100%;
+    aspect-ratio: 4/3;
+    display: inline-block;
+    border: 1px #f1f1f1 solid;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    background-size: cover;
+    position: relative;
+    overflow: visible;
+}
