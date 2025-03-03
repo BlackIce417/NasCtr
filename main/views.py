@@ -31,22 +31,8 @@ def _logout(request):
 @login_required(login_url="/login/")
 def index(request):
     user = request.user
-    album_list = Album.objects.filter(host=user)
-    album = []
-    if album_list is not None:
-        for a in album_list:
-            album.append(
-                {
-                    "album": a,
-                    "album_cover": a.cover,
-                    "pictures": Picture.objects.filter(album=a)
-                    .order_by("-uploaded_at"),
-                }
-            )
-
     context = {
         "user": user,
-        "albums": album,
     }
     return render(request, "main/index.html", context)
 
@@ -64,7 +50,7 @@ def register(request):
                 return HttpResponse(f"Fail to register: {e}")
         except Exception as e:
             return HttpResponse(f"Fail to register: {e}")
-    return render(request, "main/register.html")
+    return redirect("main:login")
 
 
 @login_required(login_url="/login/")
@@ -101,7 +87,11 @@ def album(request, album_id):
         else:
             return HttpResponse("Upload fail")
     form = PictureForm()
-    pictures = Picture.objects.filter(album=album).exclude(picture_type="default_cover").order_by("-uploaded_at")
+    pictures = (
+        Picture.objects.filter(album=album)
+        .exclude(picture_type="default_cover")
+        .order_by("-uploaded_at")
+    )
     context = {"album": album, "pic_form": form, "pictures": pictures}
     return render(request, "main/album.html", context)
 
@@ -134,16 +124,42 @@ def edit_album(request):
         album.save()
     return redirect("main:albums", album_id=album.id)
 
+
 @login_required(login_url="/login/")
 def delete_album(request):
     album = Album.objects.get(id=request.GET.get("album"))
     album.delete()
     return redirect("main:usercenter")
 
+
 @login_required(login_url="/login/")
 def load_pictures(request):
-    album = Album.objects.get(host=request.user,)
-    pictures = Picture.objects.filter(album=album, picture_type="user_upload").order_by("-uploaded_at")
+    album = Album.objects.get(
+        host=request.user,
+    )
+    pictures = Picture.objects.filter(album=album, picture_type="user_upload").order_by(
+        "-uploaded_at"
+    )
     context = {"pictures": pictures}
     print(f"{pictures}")
     return render(request, "main/images_list.html", context)
+
+
+@login_required(login_url="/login/")
+def load_albums(request):
+    album_list = Album.objects.filter(host=request.user)
+    album = []
+    if album_list is not None:
+        for a in album_list:
+            album.append(
+                {
+                    "album": a,
+                    "album_cover": a.cover,
+                    "pictures": Picture.objects.filter(album=a).order_by(
+                        "-uploaded_at"
+                    ),
+                }
+            )
+
+    context = {"albums": album}
+    return render(request, "main/album_list.html", context)

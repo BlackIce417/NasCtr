@@ -42,11 +42,13 @@ class Album(models.Model):
             if self.cover.album != self:
                 raise ValidationError("封面图片必须是本相册中的图片。")
         elif not self.cover:
-            default_cover_path = os.path.join(settings.MEDIA_ROOT, 'main/album/default', 'default_cover.jpg')
-            print(default_cover_path)
-            if os.path.exists(default_cover_path):
+            default_cover_path_jpg = os.path.join(settings.MEDIA_ROOT, 'main/album/default', 'default_cover.jpg')
+            default_cover_path_png = os.path.join(settings.MEDIA_ROOT, 'main/album/default', 'default_cover.png')
+            if os.path.exists(default_cover_path_jpg):
                 self.cover = Picture.objects.create(image='main/album/default/default_cover.jpg', name='默认封面', album=self, picture_type="default_cover")
-                # print(f"cover={self.cover.id}")
+                super().save(update_fields=["cover"])
+            elif os.path.exists(default_cover_path_png):
+                self.cover = Picture.objects.create(image='main/album/default/default_cover.png', name='默认封面', album=self, picture_type="default_cover")
                 super().save(update_fields=["cover"])
             else:
                 raise ValidationError("默认封面图片丢失。")

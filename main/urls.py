@@ -18,6 +18,7 @@ urlpatterns = [
     path('deletep', views.delete_picture, name="delete-picture"),
     path('editalbum', views.edit_album, name="edit-album"),
     path('usercenter/load-pictures/', views.load_pictures, name="load-pictures"),
+    path('usercenter/load-albums/', views.load_albums, name="load-albums"),
 
 ]
 

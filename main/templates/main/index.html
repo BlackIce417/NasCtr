@@ -14,10 +14,10 @@
         <nav>
           <ul>
             <li>
-              <a href="#">相册</a>
+              <a href="#" id="load-albums">相册</a>
             </li>
             <li>
-              <a href="{% url 'main:load-pictures' %}" id="load-pictures">照片</a>
+              <a href="#" id="load-pictures">照片</a>
             </li>
             <li>
               <a href="#">视频</a>
@@ -40,7 +40,7 @@
       <div>
         <a href="{% url 'main:create_album' %}" class="btn btn-primary">新建相册</a>
         <hr />
-        <div class="album-list"></div>
+        <div class="album-list" id="album-list"></div>
         <div class="picture-list" id="picture-list"></div>
       </div>
     </div>
