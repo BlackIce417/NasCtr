@@ -1,5 +1,15 @@
 {% for picture in pictures %}
-    <div class="picture-item" style="background-image: url({{ picture.image.url }});"></div>
+  <div class="picture-item" style="background-image: url({{ picture.image.url }});">
+    <div class="dropdown-area dropdown dropdown-menu-end">
+      <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"></button>
+      <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+        <li>
+          <button class="dropdown-item">编辑</button>
+        </li>
+        <li>
+          <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 {% endfor %}
-
-
