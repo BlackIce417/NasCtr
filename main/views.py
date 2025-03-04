@@ -134,10 +134,10 @@ def delete_album(request):
 
 @login_required(login_url="/login/")
 def load_pictures(request):
-    album = Album.objects.get(
+    album = Album.objects.filter(
         host=request.user,
     )
-    pictures = Picture.objects.filter(album=album, picture_type="user_upload").order_by(
+    pictures = Picture.objects.filter(album__in=album, picture_type="user_upload").order_by(
         "-uploaded_at"
     )
     context = {"pictures": pictures}

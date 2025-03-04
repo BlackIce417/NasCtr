@@ -31,23 +31,53 @@
     text-align: center;
 }
 
+.popup .popup-content {
+    margin: 0;
+    padding: 20px;
+}
+
+.popup .albume-name {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    
+}
+
+.popup .albume-name label {
+    margin: 0 10px;
+}
+
+.popup .albume-name input {
+    margin: 0 10px;
+    flex: 1;
+}
+
+.popup .albume-description {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.popup .albume-description label {
+    margin: 0 10px;
+}
+
+.popup .albume-description input {
+    margin: 0 10px;
+    flex: 1;
+}
+
 /* 弹出框的标题 */
 .popup_title {
     height: 60px;
     line-height: 60px;
     border-bottom: solid 1px #cccccc;
+    margin: 0;
 }
 
-/* 弹出框的内容 */
-.popup_content {
-    height: 50px;
-    line-height: 50px;
-    padding: 15px 20px;
-}
-
-/* 弹出框的按钮栏 */
-.popup_btn {
-    padding-bottom: 10px;
+.popup .popup_btn {
+    display: flex;
+    justify-content: space-between;
 }
 
 /* 弹出框的按钮 */

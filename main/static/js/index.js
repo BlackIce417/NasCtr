@@ -2,14 +2,14 @@ $(document).ready(function () {
 
     loadAlbums();
 
-    $("#load-albums").click(function(e) {
+    $("#load-albums").click(function (e) {
         e.preventDefault();
         loadAlbums();
         $("#picture-list").hide();
         $("#album-list").show();
     })
 
-    $("#load-pictures").click(function(e) {
+    $("#load-pictures").click(function (e) {
         e.preventDefault();
         $("#album-list").hide();
         $.ajax({
@@ -17,7 +17,7 @@ $(document).ready(function () {
             method: "GET",
             success: function (data) {
                 $("#picture-list").html(data);
-                console.log(data);
+                // console.log(data);
             },
             error: function (error) {
                 console.log(error);
@@ -25,6 +25,11 @@ $(document).ready(function () {
         })
         $("#picture-list").show();
     })
+
+    $(document).on("click", "#btn-pictruedetail", function (e) {
+        $("#overlay").show()
+        console.log("clicked");
+    });
 });
 
 function loadAlbums() {
@@ -33,7 +38,7 @@ function loadAlbums() {
         method: "GET",
         success: function (data) {
             $("#album-list").html(data);
-            console.log(data);
+            // console.log(data);
         },
         error: function (error) {
             console.log(error);
