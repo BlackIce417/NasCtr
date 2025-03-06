@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nas Center</title>
+    <title>{{user.username}}'s center</title>
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index_style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/album.css' %}" />
@@ -39,10 +39,8 @@
       </head>
       <hr />
       <div>
-        <a href="{% url 'main:create_album' %}" class="btn btn-primary">新建相册</a>
-        <hr />
-        <div class="album-list" id="album-list"></div>
-        <div class="picture-list" id="picture-list"></div>
+        <div class="album-area" id="album-area"></div>
+        <div class="picture-area" id="picture-area"></div>
       </div>
     </div>
   </body>

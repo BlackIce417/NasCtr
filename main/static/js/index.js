@@ -5,31 +5,38 @@ $(document).ready(function () {
     $("#load-albums").click(function (e) {
         e.preventDefault();
         loadAlbums();
-        $("#picture-list").hide();
-        $("#album-list").show();
+        $("#picture-area").hide();
+        $("#album-area").show();
     })
 
     $("#load-pictures").click(function (e) {
         e.preventDefault();
-        $("#album-list").hide();
+        $("#album-area").hide();
         $.ajax({
             url: loadPicturesUrl,
             method: "GET",
             success: function (data) {
-                $("#picture-list").html(data);
+                $("#picture-area").html(data);
                 // console.log(data);
             },
             error: function (error) {
                 console.log(error);
             }
         })
-        $("#picture-list").show();
+        $("#picture-area").show();
     })
 
     $(document).on("click", "#btn-pictruedetail", function (e) {
-        $("#overlay").show()
-        console.log("clicked");
+        let pictureId = $(this).data("picture-id");
+        let overlayId = $("#overlay-"+pictureId);
+        overlayId.show()
     });
+
+    $(document).on("click", ".confirmBtn, .cancelBtn", function (e) {
+        let pictureId = $(this).data("picture-id");
+        let overlayId = $("#overlay-"+pictureId);
+        overlayId.hide()
+    })
 });
 
 function loadAlbums() {
@@ -37,7 +44,7 @@ function loadAlbums() {
         url: loadAlbumsUrl,
         method: "GET",
         success: function (data) {
-            $("#album-list").html(data);
+            $("#album-area").html(data);
             // console.log(data);
         },
         error: function (error) {
@@ -45,4 +52,10 @@ function loadAlbums() {
         }
     })
 }
+
+function hidePopup(params) {
+    $("#overlay").hide();
+}
+
+
 

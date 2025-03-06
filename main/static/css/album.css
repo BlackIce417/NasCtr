@@ -5,7 +5,7 @@
 }
 
 /* 遮罩层 */
-#overlay {
+.overlay {
     position: fixed;
     left: 0px;
     top: 0px;
@@ -25,7 +25,7 @@
     background-color: #ffffff;
     max-width: 400px;
     min-width: 200px;
-    height: 240px;
+    /* height: 240px; */
     border-radius: 5px;
     margin: 100px auto;
     text-align: center;
@@ -36,33 +36,47 @@
     padding: 20px;
 }
 
-.popup .albume-name {
+.popup .album-name {
     display: flex;
     align-items: center;
     margin: 5px 0;
-    
 }
 
-.popup .albume-name label {
+.popup .album-name label {
     margin: 0 10px;
 }
 
-.popup .albume-name input {
+.popup .album-name input {
     margin: 0 10px;
     flex: 1;
 }
 
-.popup .albume-description {
+.popup .album-description {
     display: flex;
     align-items: center;
     margin: 5px 0;
 }
 
-.popup .albume-description label {
+.popup .album-description label {
     margin: 0 10px;
 }
 
-.popup .albume-description input {
+.popup .album-label {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.popup .album-label label {
+    margin: 0 10px;
+}
+
+.popup .album-label input{
+    margin: 0 10px;
+    flex: 1;
+}
+
+.popup .album-description input {
     margin: 0 10px;
     flex: 1;
 }
@@ -109,8 +123,10 @@
     background-repeat: no-repeat;
     background-origin: border-box;
     background-size: cover;
+    background-repeat: no-repeat;
+    /* background-attachment: fixed; */
     position: relative;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .picture-item:hover {
@@ -135,4 +151,65 @@
 
 .upload-area {
     display: none;
+}
+
+/* 可点击放大的图片 */
+.zoomable {
+    width: 100%;
+    max-width: 300px;
+    cursor: pointer; /* 鼠标悬浮时显示指针 */
+}
+
+/* 模态框样式 */
+.modal {
+    display: none; /* 默认隐藏模态框 */
+    position: fixed; /* 固定定位，覆盖整个页面 */
+    z-index: 1; /* 确保模态框显示在最上层 */
+    padding-top: 100px; /* 模态框内内容距离顶部的距离 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* 当内容溢出时显示滚动条 */
+    background-color: rgba(0, 0, 0, 0.2); /* 半透明背景 */
+}
+
+/* 模态框内放大的图片 */
+.modal-content {
+    margin: auto; /* 居中对齐 */
+    display: block; /* 块级显示 */
+    width: 80%; /* 图片的宽度 */
+    max-width: 700px; /* 最大宽度限制 */
+}
+
+/* 图片的缩放动画 */
+.modal-content {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+/* 缩放动画 */
+@keyframes zoom {
+    from {
+        transform: scale(0); /* 初始缩放为0 */
+    }
+    to {
+        transform: scale(1); /* 缩放到1倍 */
+    }
+}
+
+/* 关闭按钮样式 */
+.close {
+    position: absolute; /* 绝对定位 */
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1; /* 按钮颜色 */
+    font-size: 40px; /* 字体大小 */
+    font-weight: bold; /* 字体加粗 */
+    cursor: pointer; /* 鼠标悬浮时显示指针 */
+}
+
+/* 鼠标悬浮时关闭按钮的样式 */
+.close:hover {
+    color: #bbb; /* 更改悬浮时的颜色 */
 }

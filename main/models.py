@@ -99,7 +99,8 @@ class Picture(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='pictures', verbose_name='相册')
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='上传于')
     picture_type = models.CharField(choices=[("user_upload", "用户上传"), ("default_cover", "默认相册封面")], default="user_upload", max_length=50)
-    
+    labels = models.ManyToManyField('Label', blank=True, verbose_name='标签', related_name="pictures")
+
     def __str__(self):
         return self.name
     
@@ -120,4 +121,13 @@ class Picture(models.Model):
     class Meta:
         verbose_name = '图片'
 
+class Label(models.Model):
+    name = models.CharField(max_length=100, verbose_name='标签名称', unique=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = '标签'
+        verbose_name_plural = '标签'
 

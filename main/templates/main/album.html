@@ -15,16 +15,16 @@
           <span>{{ album.name }}</span>
           <span>{{ album.description }}</span>
           <button class="btn btn-edit-albuminfo">修改</button>
-          <form id="overlay" action="{% url 'main:edit-album' %}?album={{ album.id }}" method="post">
+          <form id="overlay" class="overlay" action="{% url 'main:edit-album' %}?album={{ album.id }}" method="post">
             {% csrf_token %}
             <div class="popup">
               <p class="popup_title">编辑相册信息</p>
               <div class="popup-content">
-                <div class="albume-name">
+                <div class="album-name">
                   <label for="name">名称:</label>
                   <input type="text" id="name" name="name" value="{{ album.name }}" />
                 </div>
-                <div class="albume-description">
+                <div class="album-description">
                   <label for="description">备注:</label>
                   <input type="text" id="description" name="description" value="{{ album.name }}" />
                 </div>
@@ -54,12 +54,12 @@
       <hr />
       <div class="pictures-gallery">
         {% for picture in pictures %}
-          <div class="picture-item" style="background-image: url({{ picture.image.url }});">
+          <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}">
             <div class="dropdown-area dropdown dropdown-menu-end">
-              <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"></button>
+              <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
               <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
                 <li>
-                  <button class="dropdown-item">详情</button>
+                  <button class="dropdown-item" id="btn-viewdetails" onclick="event.stopPropagation()" data-picture-id="{{ picture.id }}">详情</button>
                 </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
@@ -68,10 +68,50 @@
             </div>
           </div>
         {% endfor %}
+        <div id="modal" class="modal">
+          <!-- 关闭按钮 -->
+          <span class="close" id="close-modal">&times;</span>
+          <!-- 用于放大查看的图片 -->
+          <img src="#" class="modal-content" id="modalImage" />
+        </div>
+        <div id="overlay-view-detail" class="overlay">
+          <div class="popup">
+            <p class="popup_title">相片详情</p>
+            <div class="popup-content">
+              <div class="album-name">
+                <label for="upload-date">上传日期:</label>
+                <span id="upload-date"></span>
+              </div>
+              <div class="album-name">
+                <label for="album">所属相册:</label>
+                <span id="album"></span>
+              </div>
+              <form action="#" method="post">
+                {% csrf_token %}
+                <div class="album-description">
+                  <label for="description">备注:</label>
+                  <input type="text" id="description" name="description" value="" />
+                </div>
+                <div class="album-label">
+                  <label for="label">标签:</label>
+                  <input type="text" id="label" name="description" value="" />
+                </div>
+                <div class="popup_btn">
+                  <button class="confirmBtn" id="save-detail-changes" type="submit">保存</button>
+                  <button class="cancelBtn" id="hide-details" type="button">取消</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/album.js' %}"></script>
+  <script>
+    var viewPictureModalUrl = "{% url 'main:view-picture-modal' %}"
+    var viewPictureDetail = "{% url 'main:view-picture-detail' %}"
+  </script>
 </html>

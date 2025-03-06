@@ -1,34 +1,49 @@
-{% for picture in pictures %}
-  <div class="picture-item" style="background-image: url({{ picture.image.url }});">
-    <div class="dropdown-area dropdown dropdown-menu-end">
-      <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"></button>
-      <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
-        <li>
-          <button class="dropdown-item" id="btn-pictruedetail">详情</button>
-        </li>
-        <li>
-          <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
-        </li>
-      </ul>
+<a href="{% url 'main:create_album' %}" class="btn btn-primary">上传图片</a>
+<hr />
+<div class="picture-list" id="picture-list">
+  {% for picture in pictures %}
+    <div class="picture-item" style="background-image: url({{ picture.image.url }});">
+      <div class="dropdown-area dropdown dropdown-menu-end">
+        <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"></button>
+        <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+          <li>
+            <button class="dropdown-item" id="btn-pictruedetail" data-picture-id="{{ picture.id }}">详情</button>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div id="overlay">
-    <div class="popup">
-      <p class="popup_title">编辑相册信息</p>
-      <div class="popup-content">
-        <div class="albume-name">
-          <label for="name">名称:</label>
-          <input type="text" id="name" name="name" value="{{ album.name }}" />
-        </div>
-        <div class="albume-description">
-          <label for="description">备注:</label>
-          <input type="text" id="description" name="description" value="{{ album.name }}" />
-        </div>
-        <div class="popup_btn">
-          <button class="confirmBtn" onclick="hidePopup()" type="submit">保存</button>
-          <button class="cancelBtn" onclick="hidePopup()" type="button">取消</button>
+    <div id="overlay-{{ picture.id }}" class="overlay">
+      <div class="popup">
+        <p class="popup_title">相片详情</p>
+        <div class="popup-content">
+          <div class="album-name">
+            <label for="name">上传日期:</label>
+            <span id="name">{{ picture.uploaded_at }}</span>
+          </div>
+          <div class="album-name">
+            <label for="album">所属相册:</label>
+            <span id="album">{{ picture.album.name }}</span>
+          </div>
+          <form action="#" method="post">
+            {% csrf_token %}
+            <div class="album-description">
+              <label for="description">备注:</label>
+              <input type="text" id="description" name="description" value="{{ album.name }}" />
+            </div>
+            <div class="album-label">
+              <label for="description">标签:</label>
+              <input type="text" id="description" name="description" value="" />
+            </div>
+            <div class="popup_btn">
+              <button class="confirmBtn" type="submit" data-picture-id="{{ picture.id }}">保存</button>
+              <button class="cancelBtn" type="button" data-picture-id="{{ picture.id }}">取消</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </div>
-{% endfor %}
+  {% endfor %}
+</div>

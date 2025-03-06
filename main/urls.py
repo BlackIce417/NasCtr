@@ -19,6 +19,8 @@ urlpatterns = [
     path('editalbum', views.edit_album, name="edit-album"),
     path('usercenter/load-pictures/', views.load_pictures, name="load-pictures"),
     path('usercenter/load-albums/', views.load_albums, name="load-albums"),
+    path('view-picture-modal', views.view_picture_modal, name="view-picture-modal"),
+    path('view-picture-detail', views.view_picture_detail, name="view-picture-detail"),
 
 ]
 

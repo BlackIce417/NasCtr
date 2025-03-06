@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -137,9 +137,9 @@ def load_pictures(request):
     album = Album.objects.filter(
         host=request.user,
     )
-    pictures = Picture.objects.filter(album__in=album, picture_type="user_upload").order_by(
-        "-uploaded_at"
-    )
+    pictures = Picture.objects.filter(
+        album__in=album, picture_type="user_upload"
+    ).order_by("-uploaded_at")
     context = {"pictures": pictures}
     print(f"{pictures}")
     return render(request, "main/images_list.html", context)
@@ -151,15 +151,42 @@ def load_albums(request):
     album = []
     if album_list is not None:
         for a in album_list:
+            pictures = Picture.objects.filter(album=a, picture_type="user_upload").order_by("-uploaded_at")
             album.append(
                 {
                     "album": a,
                     "album_cover": a.cover,
-                    "pictures": Picture.objects.filter(album=a).order_by(
-                        "-uploaded_at"
-                    ),
+                    # "pictures": pictures,
+                    "count": len(pictures) if len(pictures) > 0 else 0,
                 }
             )
 
     context = {"albums": album}
     return render(request, "main/album_list.html", context)
+
+
+def view_picture_modal(reqeust):
+    picture_id = reqeust.GET.get("picture_id")
+    try:
+        picture = Picture.objects.get(id=picture_id)
+        return JsonResponse({"picture": {"image_url": picture.image.url}})
+    except Exception as e:
+        return JsonResponse({"error": f"{e}"})
+
+
+def view_picture_detail(request):
+    picture_id = request.GET.get("picture_id")
+    try:
+        picture = Picture.objects.get(id=picture_id)
+        return JsonResponse(
+            {
+                "picture": {
+                    "belongs_to": picture.album.name,
+                    "description": picture.description,
+                    "uploaded_at": picture.uploaded_at,
+                    # "label": picture.labels.all(),
+                }
+            }
+        )
+    except Exception as e:
+        return JsonResponse({"error": f"{e}"})

@@ -53,3 +53,7 @@ nav a {
     position: relative;
     overflow: visible;
 }
+
+.picture-count {
+    color: #ccc
+}
