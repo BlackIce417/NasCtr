@@ -48,7 +48,6 @@ $(document).ready(function () {
                 console.log(data);
                 if (data.picture) {
                     var uploadDate = new Date(data.picture.uploaded_at);
-                    
                     $("#upload-date").text((uploadDate.toLocaleString()));
                     $("#album").text(data.picture.belongs_to);
                     $("#description").text(data.picture.description);
