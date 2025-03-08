@@ -176,7 +176,7 @@
 
 /* 模态框内放大的图片 */
 .modal-content {
-    margin: auto; /* 居中对齐 */
+    margin: 0; /* 居中对齐 */
     display: block; /* 块级显示 */
     width: 80%; /* 图片的宽度 */
     max-width: 700px; /* 最大宽度限制 */
@@ -212,4 +212,22 @@
 /* 鼠标悬浮时关闭按钮的样式 */
 .close:hover {
     color: #bbb; /* 更改悬浮时的颜色 */
+}
+
+.modal .picture-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.modal .picture-content .text-area {
+    width: 300px;
+    height: 700px;
+    background-color: #ffffff;
+    margin: auto 0;
+    border-radius: 5px;
+}
+
+.modal .picture-content .text-area .text-info-1{
+    margin: 5px;
 }

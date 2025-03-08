@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".picture-item", function (e) {
         var pictureId = $(this).data("picture-id");
-        console.log(pictureId);
+        // console.log(pictureId);
         $.ajax({
             url: viewPictureModalUrl + "?picture_id=" + pictureId,
             method: "GET",
@@ -23,6 +23,11 @@ $(document).ready(function () {
                 console.log(data);
                 if (data.picture) {
                     $(".modal-content").attr("src", data.picture.image_url);
+                    var uploadDate = new Date(data.picture.uploaded_at);
+                    $("#modal-upload-date").text((uploadDate.toLocaleString()));
+                    $("#modal-album").text(data.picture.belongs_to);
+                    $("#modal-description").val(data.picture.description);
+                    $("#modal-label").val(data.picture.label);
                     $(".modal").show()
                 } else {
                     console.log("No image found");
@@ -38,9 +43,10 @@ $(document).ready(function () {
         $(".modal").hide();
     })
 
-    $("#btn-viewdetails").click(function(e) {
+    $(".btn-viewdetails").click(function(e) {
         var pictureId = $(this).data("picture-id");
         $("#overlay-view-detail").show();
+        $("#form-picture-detail").attr("action", viewPictureDetail + "?picture_id=" + pictureId)
         $.ajax({
             url: viewPictureDetail + "?picture_id=" + pictureId,
             method: "GET",
@@ -50,8 +56,14 @@ $(document).ready(function () {
                     var uploadDate = new Date(data.picture.uploaded_at);
                     $("#upload-date").text((uploadDate.toLocaleString()));
                     $("#album").text(data.picture.belongs_to);
-                    $("#description").text(data.picture.description);
-                    $("#label").text(data.picture.label);
+                    $("#detail-description").val(data.picture.description);
+                    console.log($("#description")[0])
+                    if (Array.isArray(data.picture.label)) {
+                        $("#label").val(data.picture.label.join(", "));
+                    } else {
+                        
+                    }
+                
                 } else {
                     console.log("No image found");
                 }

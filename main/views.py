@@ -151,7 +151,9 @@ def load_albums(request):
     album = []
     if album_list is not None:
         for a in album_list:
-            pictures = Picture.objects.filter(album=a, picture_type="user_upload").order_by("-uploaded_at")
+            pictures = Picture.objects.filter(
+                album=a, picture_type="user_upload"
+            ).order_by("-uploaded_at")
             album.append(
                 {
                     "album": a,
@@ -169,7 +171,17 @@ def view_picture_modal(reqeust):
     picture_id = reqeust.GET.get("picture_id")
     try:
         picture = Picture.objects.get(id=picture_id)
-        return JsonResponse({"picture": {"image_url": picture.image.url}})
+        return JsonResponse(
+            {
+                "picture": {
+                    "image_url": picture.image.url,
+                    "belongs_to": picture.album.name,
+                    "description": picture.description,
+                    "uploaded_at": picture.uploaded_at,
+                    "label": list(picture.labels.values_list("name", flat=True)),
+                }
+            }
+        )
     except Exception as e:
         return JsonResponse({"error": f"{e}"})
 
@@ -178,15 +190,29 @@ def view_picture_detail(request):
     picture_id = request.GET.get("picture_id")
     try:
         picture = Picture.objects.get(id=picture_id)
-        return JsonResponse(
-            {
-                "picture": {
-                    "belongs_to": picture.album.name,
-                    "description": picture.description,
-                    "uploaded_at": picture.uploaded_at,
-                    # "label": picture.labels.all(),
-                }
-            }
-        )
     except Exception as e:
         return JsonResponse({"error": f"{e}"})
+    if request.method == "POST":
+        description = request.POST["description"]
+        label = [name.strip() for name in request.POST["label"].split(",") if name.strip() ]
+        # print(f"label={label}")
+        picture.description = description
+        labels = Label.objects.filter(name__in=label)
+        print(labels)
+        if labels.exists():
+            picture.labels.set(labels)
+        else:
+            new_labels = [Label.objects.create(name=l) for l in label]
+            picture.labels.set(new_labels)
+        picture.save()
+        return redirect("main:albums", album_id=picture.album.id)
+    return JsonResponse(
+        {
+            "picture": {
+                "belongs_to": picture.album.name,
+                "description": picture.description,
+                "uploaded_at": picture.uploaded_at,
+                "label": list(picture.labels.values_list("name", flat=True)),
+            }
+        }
+    )
