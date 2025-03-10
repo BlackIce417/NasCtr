@@ -20,6 +20,17 @@ nav a {
     color: #000;
 }
 
+.search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.search-box input {
+    margin-right: 5px;
+}
+
 .btn-usropt {
     border: none;
     background-color: transparent;

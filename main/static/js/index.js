@@ -37,6 +37,24 @@ $(document).ready(function () {
         let overlayId = $("#overlay-"+pictureId);
         overlayId.hide()
     })
+
+    $("#btn-search").click(function (e) {
+        e.preventDefault();
+        var q = $("#search").val();
+        console.log(q);
+        $.ajax({
+            url: "/search/",
+            method: "GET",
+            data: { q: q },
+            success: function (data) {
+                // $("#picture-area").html(data);
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    });
 });
 
 function loadAlbums() {

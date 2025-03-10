@@ -141,7 +141,7 @@ def load_pictures(request):
         album__in=album, picture_type="user_upload"
     ).order_by("-uploaded_at")
     context = {"pictures": pictures}
-    print(f"{pictures}")
+    # print(f"{pictures}")
     return render(request, "main/images_list.html", context)
 
 
@@ -166,7 +166,7 @@ def load_albums(request):
     context = {"albums": album}
     return render(request, "main/album_list.html", context)
 
-
+@login_required(login_url="/login/")
 def view_picture_modal(reqeust):
     picture_id = reqeust.GET.get("picture_id")
     try:
@@ -186,6 +186,7 @@ def view_picture_modal(reqeust):
         return JsonResponse({"error": f"{e}"})
 
 
+@login_required(login_url="/login/")
 def view_picture_detail(request):
     picture_id = request.GET.get("picture_id")
     try:
@@ -216,3 +217,17 @@ def view_picture_detail(request):
             }
         }
     )
+
+
+@login_required(login_url="/login/")
+def search(request):
+    q=request.GET.get("q")
+    print(f"{request.GET}")
+    if q is None:
+        return HttpResponse("No query")
+    if q[0] == "#":
+        tag = q[1:]
+        pictures = Picture.objects.filter(tag__name=tag)
+        context = {"pictures": pictures}
+        return render(request, "main/images_list.html", context)
+    return HttpResponse(f"Not found: {q}")
