@@ -61,17 +61,17 @@
     margin: 0 10px;
 }
 
-.popup .album-label {
+.popup .album-tag {
     display: flex;
     align-items: center;
     margin: 5px 0;
 }
 
-.popup .album-label label {
+.popup .album-tag label {
     margin: 0 10px;
 }
 
-.popup .album-label input{
+.popup .album-tag input{
     margin: 0 10px;
     flex: 1;
 }
@@ -224,10 +224,15 @@
     width: 300px;
     height: 700px;
     background-color: #ffffff;
-    margin: auto 0;
+    margin: auto 0 auto 5px;
     border-radius: 5px;
 }
 
 .modal .picture-content .text-area .text-info-1{
     margin: 5px;
+}
+
+.tag-area a{
+    text-decoration: none;
+    margin: 0 0 0 5px;
 }

@@ -178,7 +178,7 @@ def view_picture_modal(reqeust):
                     "belongs_to": picture.album.name,
                     "description": picture.description,
                     "uploaded_at": picture.uploaded_at,
-                    "label": list(picture.labels.values_list("name", flat=True)),
+                    "tags": list(picture.tag.values_list("name", flat=True)),
                 }
             }
         )
@@ -194,16 +194,16 @@ def view_picture_detail(request):
         return JsonResponse({"error": f"{e}"})
     if request.method == "POST":
         description = request.POST["description"]
-        label = [name.strip() for name in request.POST["label"].split(",") if name.strip() ]
-        # print(f"label={label}")
+        tag = [name.strip() for name in request.POST["tag"].split(",") if name.strip() ]
+        # print(f"tag={tag}")
         picture.description = description
-        labels = Label.objects.filter(name__in=label)
-        print(labels)
-        if labels.exists():
-            picture.labels.set(labels)
+        tags = tag.objects.filter(name__in=tag)
+        print(tags)
+        if tags.exists():
+            picture.tag.set(tags)
         else:
-            new_labels = [Label.objects.create(name=l) for l in label]
-            picture.labels.set(new_labels)
+            new_tags = [Tag.objects.create(name=l) for l in tag]
+            picture.tag.set(new_tags)
         picture.save()
         return redirect("main:albums", album_id=picture.album.id)
     return JsonResponse(
@@ -212,7 +212,7 @@ def view_picture_detail(request):
                 "belongs_to": picture.album.name,
                 "description": picture.description,
                 "uploaded_at": picture.uploaded_at,
-                "label": list(picture.labels.values_list("name", flat=True)),
+                "tags": list(picture.tag.values_list("name", flat=True)),
             }
         }
     )

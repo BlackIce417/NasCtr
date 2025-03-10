@@ -77,27 +77,23 @@
             <img src="#" class="modal-content" id="modalImage" />
             <div class="text-area">
               <div class="text-info-1">
-                <label for="modal-album">所属相册: </label>
+                <label for="modal-album">所属相册:</label>
                 <span id="modal-album"></span>
               </div>
               <div class="text-info-1">
-                <label for="modal-upload-date">上传日期: </label>
+                <label for="modal-upload-date">上传日期:</label>
                 <span id="modal-upload-date"></span>
               </div>
               <div class="text-info-1">
-                <label for="modal-description">备注: </label>
-                <input id="modal-description"></input>
+                <label for="modal-description">备注:</label>
+                <input type="text" id="modal-description" />
               </div>
-              <hr>
-              
-              {% for label in labels %}
-                <a href="#">#{{label}}</a>
-              {% endfor %}
-                
+              <hr />
+              <div class="tag-area" id="modal-tag-area"></div>
             </div>
           </div>
         </div>
-        {% comment %} 相片详情 {% endcomment %}
+        {% comment %}相片详情{% endcomment %}
         <div id="overlay-view-detail" class="overlay">
           <div class="popup">
             <p class="popup_title">相片详情</p>
@@ -116,9 +112,10 @@
                   <label for="detail-description">备注:</label>
                   <input type="text" id="detail-description" name="description" value="" />
                 </div>
-                <div class="album-label">
-                  <label for="label">标签:</label>
-                  <input type="text" id="label" name="label" value="" />
+                <div class="album-tag tag-area" id="album-tag">
+                  {% comment %} <label for="tag">标签:</label>
+                  <input type="text" id="tag" name="tag" value="" /> {% endcomment %}
+                  
                 </div>
                 <div class="popup_btn">
                   <button class="confirmBtn" id="save-detail-changes" type="submit">保存</button>

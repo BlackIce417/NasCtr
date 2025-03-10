@@ -14,6 +14,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".picture-item", function (e) {
+        $(".modal").show()
         var pictureId = $(this).data("picture-id");
         // console.log(pictureId);
         $.ajax({
@@ -27,8 +28,14 @@ $(document).ready(function () {
                     $("#modal-upload-date").text((uploadDate.toLocaleString()));
                     $("#modal-album").text(data.picture.belongs_to);
                     $("#modal-description").val(data.picture.description);
-                    $("#modal-label").val(data.picture.label);
-                    $(".modal").show()
+                    let htmlTag = data.picture.tags.map(tag => {
+                        return $("<a></a>")
+                            .attr("href", "#")
+                            .text(`#${tag}`)
+                            .prop("outerHTML");
+                    }).join("");
+                    // console.log("html tag: ", htmlTag);
+                    $("#modal-tag-area").html(htmlTag);
                 } else {
                     console.log("No image found");
                 }
@@ -57,13 +64,15 @@ $(document).ready(function () {
                     $("#upload-date").text((uploadDate.toLocaleString()));
                     $("#album").text(data.picture.belongs_to);
                     $("#detail-description").val(data.picture.description);
-                    console.log($("#description")[0])
-                    if (Array.isArray(data.picture.label)) {
-                        $("#label").val(data.picture.label.join(", "));
-                    } else {
-                        
-                    }
-                
+                    let htmlTag = data.picture.tags.map(tag => {
+                        return $("<a></a>")
+                            .attr("href", "#")
+                            .text(`#${tag}`)
+                            .prop("outerHTML");
+                    }).join("");
+                    // console.log("html tag: ", htmlTag);
+                    $("#album-tag").html(htmlTag);
+                    
                 } else {
                     console.log("No image found");
                 }
