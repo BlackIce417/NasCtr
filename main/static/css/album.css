@@ -133,18 +133,19 @@
     cursor: pointer;
 }
 
-.picture-item .dropdown-area {
+.picture-wrapper .dropdown-area {
     position: absolute;
     display: none;
+    top: 0;
     right: 0;
 }
 
-.picture-item .dropdown-area .btn-dropdown {
+.picture-wrapper .dropdown-area .btn-dropdown {
     border: none;
     background-color: #ffffff;
 }
 
-.picture-item:hover .dropdown-area {
+.picture-wrapper:hover .dropdown-area {
     display: flex;
     /* opacity: 1; */
 }
@@ -178,8 +179,9 @@
 .modal-content {
     margin: 0; /* 居中对齐 */
     display: block; /* 块级显示 */
-    width: 80%; /* 图片的宽度 */
-    max-width: 700px; /* 最大宽度限制 */
+    max-width: 800px;
+    max-height: 500px;
+    object-fit: contain;
 }
 
 /* 图片的缩放动画 */
@@ -231,11 +233,17 @@
 .modal .picture-content .text-area .text-info-1{
     margin: 5px;
 }
+
+.picture-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .picture-tag-wrapper {
     padding-left: 10px;
 }
 
-.picture-tag-wrapper .tag-area a{
+.tag-area a{
     text-decoration: none;
     margin: 0 5px 0 0;
 }

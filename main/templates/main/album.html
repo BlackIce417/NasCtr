@@ -54,7 +54,8 @@
       <hr />
       <div class="pictures-gallery">
         {% for picture in pictures %}
-          <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}">
+          <div class="picture-wrapper">
+            <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}"></div>
             <div class="dropdown-area dropdown dropdown-menu-end">
               <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
               <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
@@ -70,7 +71,6 @@
         {% endfor %}
         <div id="modal" class="modal">
           <!-- 关闭按钮 -->
-
           <span class="close" id="close-modal">&times;</span>
           <div class="picture-content">
             <!-- 用于放大查看的图片 -->
@@ -88,8 +88,8 @@
                 <label for="modal-description">备注:</label>
                 <input type="text" id="modal-description" />
               </div>
+              <div class="tag-area" style="margin: 5px;" id="modal-tag-area"></div>
               <hr />
-              <div class="tag-area" id="modal-tag-area"></div>
             </div>
           </div>
         </div>
