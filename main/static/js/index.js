@@ -11,19 +11,20 @@ $(document).ready(function () {
 
     $("#load-pictures").click(function (e) {
         e.preventDefault();
-        $("#album-area").hide();
+        // $("#album-area").hide();
         $.ajax({
             url: loadPicturesUrl,
             method: "GET",
             success: function (data) {
-                $("#picture-area").html(data);
+                // $("#picture-area").html(data);
+                showPictureArea(data);
                 // console.log(data);
             },
             error: function (error) {
                 console.log(error);
             }
         })
-        $("#picture-area").show();
+        // $("#picture-area").show();
     })
 
     $(document).on("click", "#btn-pictruedetail", function (e) {
@@ -43,12 +44,13 @@ $(document).ready(function () {
         var q = $("#search").val();
         console.log(q);
         $.ajax({
-            url: "/search/",
+            url: "/search",
             method: "GET",
             data: { q: q },
             success: function (data) {
                 // $("#picture-area").html(data);
-                console.log(data);
+                showPictureArea(data);
+                // console.log(data);
             },
             error: function (error) {
                 console.log(error);
@@ -73,6 +75,12 @@ function loadAlbums() {
 
 function hidePopup(params) {
     $("#overlay").hide();
+}
+
+function showPictureArea(data) {
+    $("#album-area").hide();
+    $("#picture-area").html(data);
+    $("#picture-area").show();
 }
 
 

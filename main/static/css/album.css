@@ -77,7 +77,7 @@
 }
 
 .popup .album-description input {
-    margin: 0 10px;
+    margin-left:10px;
     flex: 1;
 }
 
@@ -231,8 +231,23 @@
 .modal .picture-content .text-area .text-info-1{
     margin: 5px;
 }
+.picture-tag-wrapper {
+    padding-left: 10px;
+}
 
-.tag-area a{
+.picture-tag-wrapper .tag-area a{
     text-decoration: none;
-    margin: 0 0 0 5px;
+    margin: 0 5px 0 0;
+}
+
+.picture-tag-wrapper .btn-add-tag {
+    border: none;
+    background-color: transparent;
+    color: #8491a5;
+    font-size: 14px;
+}
+
+.picture-tag-wrapper .add-tag {
+    width: 100%;
+    display: none;
 }

@@ -33,9 +33,10 @@
               <label for="description">备注:</label>
               <input type="text" id="description" name="description" value="{{ album.name }}" />
             </div>
-            <div class="album-label">
-              <label for="description">标签:</label>
-              <input type="text" id="description" name="description" value="" />
+            <div class="tag-area" id="picture-tag">
+              {% for tag in picture.tag.all %}
+                <a class="tag-item" href="#">#{{ tag.name }}</a>
+              {% endfor %}
             </div>
             <div class="popup_btn">
               <button class="confirmBtn" type="submit" data-picture-id="{{ picture.id }}">保存</button>

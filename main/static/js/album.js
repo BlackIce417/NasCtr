@@ -3,12 +3,12 @@ $(document).ready(function () {
         $("#overlay").show()
     })
     // $("#overlay").show()
-    $("#btn-uplaodimg").click(function() {
+    $("#btn-uplaodimg").click(function () {
         $(".upload-area").show();
         $("#btn-uplaodimg").hide();
     })
 
-    $("#btn-cancelupload").click(function() {
+    $("#btn-cancelupload").click(function () {
         $(".upload-area").hide()
         $("#btn-uplaodimg").show();
     });
@@ -46,19 +46,19 @@ $(document).ready(function () {
         })
     });
 
-    $("#close-modal").click(function(e) {
+    $("#close-modal").click(function (e) {
         $(".modal").hide();
     })
 
-    $(".btn-viewdetails").click(function(e) {
+    $(".btn-viewdetails").click(function (e) {
         var pictureId = $(this).data("picture-id");
-        $("#overlay-view-detail").show();
+
         $("#form-picture-detail").attr("action", viewPictureDetail + "?picture_id=" + pictureId)
         $.ajax({
             url: viewPictureDetail + "?picture_id=" + pictureId,
             method: "GET",
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 if (data.picture) {
                     var uploadDate = new Date(data.picture.uploaded_at);
                     $("#upload-date").text((uploadDate.toLocaleString()));
@@ -69,10 +69,11 @@ $(document).ready(function () {
                             .attr("href", "#")
                             .text(`#${tag}`)
                             .prop("outerHTML");
-                    }).join("");
+                    }).join("") + '<button class="btn-add-tag" type="button" >添加</button>';
                     // console.log("html tag: ", htmlTag);
-                    $("#album-tag").html(htmlTag);
-                    
+                    $("#overlay-view-detail").show();
+                    $("#picture-tag").html(htmlTag);
+
                 } else {
                     console.log("No image found");
                 }
@@ -80,8 +81,12 @@ $(document).ready(function () {
         })
     });
 
-    $("#hide-details").click(function(e) {
+    $("#hide-details").click(function (e) {
         $("#overlay-view-detail").hide();
+    });
+
+    $(".picture-tag-wrapper").on("click", ".btn-add-tag", function (e) {
+        $("#input-add-tag").show();
     });
 });
 function hidePopup(params) {

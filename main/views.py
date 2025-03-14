@@ -195,16 +195,12 @@ def view_picture_detail(request):
         return JsonResponse({"error": f"{e}"})
     if request.method == "POST":
         description = request.POST["description"]
-        tag = [name.strip() for name in request.POST["tag"].split(",") if name.strip() ]
-        # print(f"tag={tag}")
         picture.description = description
-        tags = tag.objects.filter(name__in=tag)
-        print(tags)
-        if tags.exists():
-            picture.tag.set(tags)
-        else:
-            new_tags = [Tag.objects.create(name=l) for l in tag]
-            picture.tag.set(new_tags)
+        tags = [name.strip() for name in request.POST["tag"].split(",") if name.strip() ]
+        # print(f"tag={tag}")
+        for tag in tags:
+            t, created = Tag.objects.get_or_create(name=tag)
+            picture.tag.add(t)
         picture.save()
         return redirect("main:albums", album_id=picture.album.id)
     return JsonResponse(
