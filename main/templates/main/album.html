@@ -40,17 +40,26 @@
         <span style="text-align: center;">{{ album.host.username }}</span>
       </nav>
       <hr style="margin-top: 0;" />
-      <div class="upload-area">
-        <form action="#" method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          {% comment %} <input type="file" name="userupload" />
-          <button type="submit">保存</button> {% endcomment %}
-          {{ pic_form.as_p }}
-          <button class="btn btn-primary" type="submit">保存</button>
-          <button class="btn btn-danger" id="btn-cancelupload" type="button">取消</button>
+      <div class="album-options">
+        <form action="#" method="post">
+          <input type="text" />
+          <button type="submit">搜索</button>
         </form>
+        <div class="upload-area">
+          <form action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% comment %} <input type="file" name="userupload" />
+            <button type="submit">保存</button> {% endcomment %}
+            {{ pic_form.as_p }}
+            <button class="btn btn-primary" type="submit">保存</button>
+            <button class="btn btn-danger" id="btn-cancelupload" type="button">取消</button>
+          </form>
+        </div>
+        <div class="album-info-r">
+          <span class="picture-count">共{{pictures.count}}张</span>
+          <button class="btn btn-outline-dark" id="btn-uploadimg" type="button">上传图片</button>
+        </div>
       </div>
-      <button class="btn btn-outline-dark" id="btn-uplaodimg" type="button">上传图片</button>
       <hr />
       <div class="pictures-gallery">
         {% for picture in pictures %}
@@ -74,6 +83,7 @@
           <span class="close" id="close-modal">&times;</span>
           <div class="picture-content">
             <!-- 用于放大查看的图片 -->
+            <div class="arrow arrow-left"></div>
             <img src="#" class="modal-content" id="modalImage" />
             <div class="text-area">
               <div class="text-info-1">

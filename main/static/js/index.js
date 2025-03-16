@@ -27,7 +27,8 @@ $(document).ready(function () {
         // $("#picture-area").show();
     })
 
-    $(document).on("click", "#btn-pictruedetail", function (e) {
+    $(document).on("click", ".btn-viewdetails", function (e) {
+        console.log("View details clicked");
         let pictureId = $(this).data("picture-id");
         let overlayId = $("#overlay-"+pictureId);
         overlayId.show()

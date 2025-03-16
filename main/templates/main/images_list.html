@@ -2,12 +2,13 @@
 <hr />
 <div class="picture-list" id="picture-list">
   {% for picture in pictures %}
-    <div class="picture-item" style="background-image: url({{ picture.image.url }});">
+    <div class="picture-wrapper">
+      <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}"></div>
       <div class="dropdown-area dropdown dropdown-menu-end">
-        <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"></button>
+        <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
         <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
           <li>
-            <button class="dropdown-item" id="btn-pictruedetail" data-picture-id="{{ picture.id }}">详情</button>
+            <button class="dropdown-item btn-viewdetails" onclick="event.stopPropagation()" data-picture-id="{{ picture.id }}">详情</button>
           </li>
           <li>
             <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>

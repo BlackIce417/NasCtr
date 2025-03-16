@@ -3,14 +3,14 @@ $(document).ready(function () {
         $("#overlay").show()
     })
     // $("#overlay").show()
-    $("#btn-uplaodimg").click(function () {
+    $("#btn-uploadimg").click(function () {
         $(".upload-area").show();
-        $("#btn-uplaodimg").hide();
+        $("#btn-uploadimg").hide();
     })
 
     $("#btn-cancelupload").click(function () {
         $(".upload-area").hide()
-        $("#btn-uplaodimg").show();
+        $("#btn-uploadimg").show();
     });
 
     $(document).on("click", ".picture-item", function (e) {
@@ -83,6 +83,8 @@ $(document).ready(function () {
 
     $("#hide-details").click(function (e) {
         $("#overlay-view-detail").hide();
+        $("#input-add-tag").val("");
+        $("#input-add-tag").hide();
     });
 
     $(".picture-tag-wrapper").on("click", ".btn-add-tag", function (e) {
