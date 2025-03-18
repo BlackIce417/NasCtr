@@ -4,13 +4,11 @@ $(document).ready(function () {
     })
     // $("#overlay").show()
     $("#btn-uploadimg").click(function () {
-        $(".upload-area").show();
-        $("#btn-uploadimg").hide();
+        $("#uploadimg").show();
     })
 
     $("#btn-cancelupload").click(function () {
-        $(".upload-area").hide()
-        $("#btn-uploadimg").show();
+        $("#uploadimg").hide();
     });
 
     $(document).on("click", ".picture-item", function (e) {
@@ -90,6 +88,18 @@ $(document).ready(function () {
     $(".picture-tag-wrapper").on("click", ".btn-add-tag", function (e) {
         $("#input-add-tag").show();
     });
+
+    $("#btn-upload-single-img").click(function(e) {
+        $("#upload-single-image").click(); 
+    });
+    
+    $("#upload-single-image").change(function() {
+        let file = this.files[0];
+        if (file) {
+            
+        }
+    })
+
 });
 function hidePopup(params) {
     $("#overlay").hide();

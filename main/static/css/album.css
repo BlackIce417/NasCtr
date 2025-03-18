@@ -2,6 +2,66 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 10px 0 0 0;
+}
+
+.album-nav .album-info .btn-edit-albuminfo {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+}
+
+#uploadimg .upload-box {
+    padding: 10px;
+}
+
+#uploadimg .img-box .btn-group-upload {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#uploadimg .upload-box .btn-group-upload button {
+    margin: 5px;
+}
+
+#uploadimg .input-field {
+    width: 100%;
+    display: flex;
+    margin: 10px 0;
+    align-items: center;
+}
+
+#uploadimg .input-field label {
+    width: 70px ;
+    text-align-last: justify;
+    white-space: nowrap;
+}
+
+#uploadimg .input-field input {
+    flex: 1;
+}
+
+#uploadimg .popup .head button {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#uploadimg .img-box {
+
+}
+
+#uploadimg .img-area {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+#uploadimg .img-item {
+    height: 150px;
+    width: 150px;
+    background-color: transparent;
 }
 
 /* 遮罩层 */
@@ -153,6 +213,7 @@
 
 .upload-area {
     display: none;
+    z-index: 999;
 }
 
 /* 可点击放大的图片 */
@@ -287,4 +348,6 @@
 
 .album-options .album-info-r .picture-count {
     color: #cccccc;
+    margin: 5px;
+    font-size: 14px;
 }

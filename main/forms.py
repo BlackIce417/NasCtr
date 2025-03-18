@@ -6,6 +6,9 @@ class PictureForm(forms.Form):
                                   required=False, 
                                   label="备注",
                                   initial="")
+    
+    class Meta: 
+        label_suffix = ""
 
 
 

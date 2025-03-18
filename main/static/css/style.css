@@ -1,0 +1,21 @@
+.search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.search-box input {
+    margin-right: 5px;
+}
+
+.btn-upload-single-img {
+    width: 150px;
+    height: 150px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+}

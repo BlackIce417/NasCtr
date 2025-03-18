@@ -83,6 +83,7 @@ DATABASES = {
         'PASSWORD': 'test123!',
         'HOST': 'localhost',
         'PORT': '1433',
+        'CONN_MAX_AGE': 7200,
         'OPTIONS': {
             'driver': 'ODBC Driver 18 for SQL Server',
             'extra_params': 'TrustServerCertificate=yes;Encrypt=yes',

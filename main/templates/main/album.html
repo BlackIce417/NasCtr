@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/album.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>Album</title>
   </head>
   <body>
@@ -14,7 +15,7 @@
         <div class="album-info">
           <span>{{ album.name }}</span>
           <span>{{ album.description }}</span>
-          <button class="btn btn-edit-albuminfo">修改</button>
+          <button class="btn-edit-albuminfo">编辑</button>
           <form id="overlay" class="overlay" action="{% url 'main:edit-album' %}?album={{ album.id }}" method="post">
             {% csrf_token %}
             <div class="popup">
@@ -39,25 +40,54 @@
         </div>
         <span style="text-align: center;">{{ album.host.username }}</span>
       </nav>
-      <hr style="margin-top: 0;" />
+      <hr />
       <div class="album-options">
         <form action="#" method="post">
-          <input type="text" />
-          <button type="submit">搜索</button>
+          <div class="search-box">
+            <input type="text" />
+            <button class="btn btn-primary btn-sm" type="submit">搜索</button>
+          </div>
         </form>
-        <div class="upload-area">
-          <form action="#" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% comment %} <input type="file" name="userupload" />
-            <button type="submit">保存</button> {% endcomment %}
-            {{ pic_form.as_p }}
-            <button class="btn btn-primary" type="submit">保存</button>
-            <button class="btn btn-danger" id="btn-cancelupload" type="button">取消</button>
-          </form>
+        <div class="overlay" id="uploadimg">
+          <div class="popup" style="">
+            <div class="head d-flex justify-content-between align-items-center" style="margin: 0 10px;">
+              <p class="popup_title" style="border-bottom: none;text-align: left;">上传至: {{ album.name }}</p>
+              <button type="button">批量上传</button>
+            </div>
+            <hr style="margin: 0;" />
+            <form action="#" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="img-box">
+                <div class="img-area">
+                  <div class="img-item">
+                    <img src="#" style="width: 100%; height: 125px; transform-origin: 50% 50%;margin: 4px 0 3px;" id="img-item" alt="picture" />
+                  </div>
+                  <div class="upload-box">
+                    <button type="button" class="btn-upload-single-img" id="btn-upload-single-img">
+                      <svg t="1742264116856" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3106" width="200" height="200">
+                        <path d="M997.28 56l-27.712 16A47.968 47.968 0 0 0 928 48v-32c28.864 0 55.072 15.456 69.28 40z m10.72 134.048h-32v-64h32v64z m0 128h-32v-64h32v64z m0 128h-32v-64h32v64z m0 128h-32v-64h32v64z m0 128h-32v-64h32v64z m0 128h-32v-64h32v64z m-8.8 134.464l-28.48-14.624c3.456-6.72 5.28-14.144 5.28-21.888v-33.952h32V928c0 12.864-3.04 25.28-8.8 36.48zM867.936 1008v-32h60.288l2.976-0.096 2.08 31.936-2.464 0.096-62.88 0.064z m-128 0v-32h64v32h-64z m-128 0v-32h64v32h-64z m-128 0v-32h64v32h-64z m-128 0v-32h64v32h-64z m-128 0v-32h64v32h-64z m-128 0v-32h64v32h-64zM16 901.888h32V928c0 9.728 2.88 18.976 8.192 26.88l-26.496 17.92A79.68 79.68 0 0 1 16 928v-26.112z m0-128h32v64h-32v-64z m0-128h32v64h-32v-64z m0-128h32v64h-32v-64z m0-128h32v64h-32v-64z m0-128h32v64h-32v-64z m0-128h32v64h-32v-64zM86.976 16.512l3.584 31.776c-17.088 1.92-31.776 12.928-38.592 28.544l-29.344-12.8A80.064 80.064 0 0 1 86.976 16.544zM216.128 16v32h-64v-32h64z m128 0v32h-64v-32h64z m128 0v32h-64v-32h64z m128 0v32h-64v-32h64z m128 0v32h-64v-32h64z m128 0v32h-64v-32h64zM928 16v32h-7.872v-32H928z" fill="#E2E2E2" p-id="3107"></path>
+                        <path d="M255.872 544v-32h480v32z" fill="#E8E8E8" p-id="3108"></path>
+                        <path d="M479.872 288h32v480h-32z" fill="#E8E8E8" p-id="3109"></path>
+                      </svg>
+                    </button>
+                    <input style="display: none;" type="file" name="image" id="upload-single-image" />
+                  </div>
+                </div>
+                <div class="btn-group-upload">
+                  <button class="btn btn-primary" type="submit">保存</button>
+                  <button class="btn btn-danger" id="btn-cancelupload" type="button">取消</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="album-info-r">
-          <span class="picture-count">共{{pictures.count}}张</span>
-          <button class="btn btn-outline-dark" id="btn-uploadimg" type="button">上传图片</button>
+        <div class="album-info-r d-flex justify-content-center align-items-center">
+          <span class="picture-count">共{{ pictures.count }}张</span>
+          <button class="btn-upload-single-img" style="border: none;background-color: transparent;width: 20px;height: 20px;" id="btn-uploadimg" type="button">
+            <svg t="1742181099771" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1505" width="20" height="20">
+              <path d="M351.232 325.632l122.88-148.48V706.56c0 22.528 14.336 36.864 37.888 36.864s37.888-14.336 37.888-36.864V177.152l122.88 148.48c14.336 14.336 37.888 14.336 52.224 0 14.336-14.336 14.336-36.864 0-52.224l-184.32-221.184C532.48 45.056 522.24 40.96 510.976 40.96s-22.528 4.096-29.696 11.264L299.008 273.408c-14.336 14.336-14.336 36.864 0 52.224 14.336 15.36 36.864 15.36 52.224 0z m583.68 307.2c-22.528 0-37.888 14.336-37.888 36.864v259.072H122.88V670.72c0-22.528-14.336-36.864-37.888-36.864s-36.864 14.336-36.864 36.864v296.96c0 22.528 14.336 36.864 37.888 36.864h849.92c22.528 0 37.888-14.336 37.888-36.864v-296.96c-1.024-22.528-15.36-37.888-38.912-37.888z" fill="#020202" p-id="1506"></path>
+            </svg>
+          </button>
         </div>
       </div>
       <hr />
