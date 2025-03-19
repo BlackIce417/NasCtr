@@ -40,7 +40,7 @@
         </div>
         <span style="text-align: center;">{{ album.host.username }}</span>
       </nav>
-      <hr />
+      <hr/>
       <div class="album-options">
         <form action="#" method="post">
           <div class="search-box">
@@ -59,7 +59,7 @@
               {% csrf_token %}
               <div class="img-box">
                 <div class="img-area">
-                  <div class="img-item" id="img-item-wrapper">
+                  {% comment %} <div class="img-item" id="img-item-wrapper">
                     <img src="#" style="width: 100%; height: 125px; object-fit: contain;;transform-origin: 50% 50%;" id="img-item" alt="picture" />
                     <button class="d-flex align-items-center" style="height: 25px;width: 100%;border: none;background-color: transparent;" type="button" id="btn-deleteimg">
                       <svg t="1742375343895" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2775" width="100%" height="80%">
@@ -67,7 +67,7 @@
                         <path d="M400.660873 667.834782c12.298799 0 22.297822-10.099014 22.297822-22.297823V378.463041c0-12.198809-10.099014-22.197832-22.297822-22.297823-12.298799 0-22.297822 10.099014-22.297823 22.297823v267.073918c0 12.298799 10.099014 22.297822 22.297823 22.297823zM623.239137 667.834782c12.298799 0 22.297822-10.099014 22.297822-22.297823V378.463041c0-12.198809-10.099014-22.197832-22.297822-22.297823-12.298799 0-22.297822 10.099014-22.297823 22.297823v267.073918c0 12.298799 10.099014 22.297822 22.297823 22.297823z" fill="" p-id="2777"></path>
                       </svg>
                     </button>
-                  </div>
+                  </div> {% endcomment %}
                   <div class="upload-box">
                     <button type="button" class="btn-upload-single-img" id="btn-upload-single-img">
                       <svg t="1742264116856" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3106" width="200" height="200">
