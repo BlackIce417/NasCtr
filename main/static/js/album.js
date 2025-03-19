@@ -96,9 +96,18 @@ $(document).ready(function () {
     $("#upload-single-image").change(function() {
         let file = this.files[0];
         if (file) {
-            
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function() {
+                $("#img-item").attr("src", this.result);
+                $(".img-item").show();
+            };
         }
     })
+
+    $(document).on("click", "#btn-deleteimg", function (e) {
+
+    });
 
 });
 function hidePopup(params) {

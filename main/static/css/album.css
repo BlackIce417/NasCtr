@@ -49,10 +49,6 @@
     cursor: pointer;
 }
 
-#uploadimg .img-box {
-
-}
-
 #uploadimg .img-area {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -61,7 +57,9 @@
 #uploadimg .img-item {
     height: 150px;
     width: 150px;
+    margin: 10px;
     background-color: transparent;
+    display: none;
 }
 
 /* 遮罩层 */
@@ -83,7 +81,7 @@
 /* 弹出框主体 */
 .popup {
     background-color: #ffffff;
-    max-width: 400px;
+    max-width: 1000px;
     min-width: 200px;
     /* height: 240px; */
     border-radius: 5px;
