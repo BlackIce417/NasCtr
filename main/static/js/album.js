@@ -110,8 +110,10 @@ $(document).ready(function () {
         }
     })
 
-    $(document).on("click", "#btn-deleteimg", function (e) {
-
+    $(document).on("click", ".btn-delete-img-item", function (e) {
+        // alert("Delete image item");
+        let wrapperId = $(this).attr("id").split("-").pop();
+        $("#img-wrapper-" + wrapperId).remove();
     });
 
 });
@@ -131,7 +133,7 @@ function createImageItemWrapper() {
         "object-fit": "contain"
     });
     let $button = $("<button>", {
-        class: 'd-flex align-items-center justify-content-center',
+        class: 'd-flex align-items-center justify-content-center btn-delete-img-item',
         id: 'btn-deleteimg',
         type: 'button',
         id: "btn-deleteImgItem-" + uniqueId,
