@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    let csrftoken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     $(".btn-edit-albuminfo").click(function () {
         $("#overlay").show()
     })
@@ -93,27 +94,72 @@ $(document).ready(function () {
         $("#upload-single-image").click();
     });
 
+    let imgFiles = [];
     $("#upload-single-image").change(function () {
-        let file = this.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function () {
-                // $("#img-item").attr("src", this.result);
-                // $(".img-item").show();
-                let $imgItemWrapper = createImageItemWrapper();
-                $(".upload-box").before($imgItemWrapper);
-                $imgItemWrapper.find("img").attr("src", this.result);
-                console.log($imgItemWrapper);
-                $imgItemWrapper.show();
-            };
+        let files = this.files;
+        if (files.length === 0) return;
+        for (let i = 0; i < files.length; i++) {
+            let fileIndex = imgFiles.length;
+            let file = files[i];
+
+            if (file) {
+                imgFiles.push(file);
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = function () {
+                    // $("#img-item").attr("src", this.result);
+                    // $(".img-item").show();
+                    let $imgItemWrapper = createImageItemWrapper(fileIndex);
+                    $(".upload-box").before($imgItemWrapper);
+                    $imgItemWrapper.find("img").attr("src", this.result);
+                    // console.log($imgItemWrapper);
+                    $imgItemWrapper.show();
+                }
+            }
         }
+        $(this).val("");
     })
 
     $(document).on("click", ".btn-delete-img-item", function (e) {
         // alert("Delete image item");
         let wrapperId = $(this).attr("id").split("-").pop();
+        let index = $("#img-wrapper-" + wrapperId).data("index");
+        imgFiles.splice(index, 1);
+        $(".img-item").each(function (i) {
+            $(this).attr("data-index", i);
+        });
         $("#img-wrapper-" + wrapperId).remove();
+    });
+
+    $("#btn-upload-image").click(function (e) {
+        if (imgFiles.length === 0) {
+            alert("请选择图片");
+            return;
+        }
+        let formData = new FormData();
+        imgFiles.forEach(file => {
+            formData.append("image[]", file);
+        });
+        $.ajax({
+            url: "",
+            method: "POST",
+            data: formData,
+            headers: { "X-CSRFToken": csrftoken },
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data);
+                if (data.success) {
+                    // alert("上传成功");
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert("上传失败");
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     });
 
 });
@@ -121,9 +167,9 @@ function hidePopup(params) {
     $("#overlay").hide();
 }
 
-function createImageItemWrapper() {
+function createImageItemWrapper(index) {
     let uniqueId = Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
-    let $wrapper = $("<div>").addClass("img-item").attr("id", "img-wrapper-" + uniqueId).css({
+    let $wrapper = $("<div>").addClass("img-item").attr("id", "img-wrapper-" + uniqueId).attr("data-index", index).css({
         "position": "relative",
         "margin-bottom": "10px"
     });
@@ -134,7 +180,7 @@ function createImageItemWrapper() {
     });
     let $button = $("<button>", {
         class: 'd-flex align-items-center justify-content-center btn-delete-img-item',
-        id: 'btn-deleteimg',
+        // id: 'btn-deleteimg',
         type: 'button',
         id: "btn-deleteImgItem-" + uniqueId,
         css: {
@@ -150,6 +196,14 @@ function createImageItemWrapper() {
             <path d="M400.660873 667.834782c12.298799 0 22.297822-10.099014 22.297822-22.297823V378.463041c0-12.198809-10.099014-22.197832-22.297822-22.297823-12.298799 0-22.297822 10.099014-22.297823 22.297823v267.073918c0 12.298799 10.099014 22.297822 22.297823 22.297823zM623.239137 667.834782c12.298799 0 22.297822-10.099014 22.297822-22.297823V378.463041c0-12.198809-10.099014-22.197832-22.297822-22.297823-12.298799 0-22.297822 10.099014-22.297823 22.297823v267.073918c0 12.298799 10.099014 22.297822 22.297823 22.297823z" fill="" p-id="2777"></path>
         </svg>
         `);
+    // let $input = $("<input>", {
+    //     css: {
+    //         display: "none"
+    //     },
+    //     name: "image",
+    //     type: "file",
+    //     accept: "image/*",
+    // })
     $button.append($svg);
     $wrapper.append($img, $button);
     return $wrapper;

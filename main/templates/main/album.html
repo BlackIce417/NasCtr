@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/album.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
@@ -52,7 +53,7 @@
           <div class="popup" style="max-width: none;width: 700px;">
             <div class="head d-flex justify-content-between align-items-center" style="margin: 0 10px;">
               <p class="popup_title" style="border-bottom: none;text-align: left;">上传至: {{ album.name }}</p>
-              <button type="button">批量上传</button>
+            
             </div>
             <hr style="margin: 0;" />
             <form action="#" method="post" enctype="multipart/form-data">
@@ -76,12 +77,13 @@
                         <path d="M479.872 288h32v480h-32z" fill="#E8E8E8" p-id="3109"></path>
                       </svg>
                     </button>
-                    <input style="display: none;" type="file" name="image" id="upload-single-image" />
-                    <input type="text" style="display: none;" name="description" />
+                    {% comment %} <input style="display: none;" type="file" name="image" id="upload-single-image" accept="image/*" multiple/> {% endcomment %}
+                    <input style="display: none;" type="file" id="upload-single-image" accept="image/*" multiple/>
+                    <input style="display: none;" type="file" name="description" />
                   </div>
                 </div>
                 <div class="btn-group-upload">
-                  <button class="btn btn-primary" type="submit">保存</button>
+                  <button class="btn btn-primary" type="button" id="btn-upload-image">保存</button>
                   <button class="btn btn-danger" id="btn-cancelupload" type="button">取消</button>
                 </div>
               </div>
@@ -180,5 +182,6 @@
   <script>
     var viewPictureModalUrl = "{% url 'main:view-picture-modal' %}"
     var viewPictureDetail = "{% url 'main:view-picture-detail' %}"
+    var uploadImagesUrl = "{% url 'main:albums' album.id %}"
   </script>
 </html>

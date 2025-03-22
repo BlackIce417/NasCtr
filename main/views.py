@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
+from django.urls import reverse
 
 from .models import *
 from .forms import *
@@ -74,18 +75,22 @@ def album(request, album_id):
     album = Album.objects.get(host=request.user, id=album_id)
     if request.method == "POST":
         pic_upload_form = PictureForm(request.POST, request.FILES)
-        # print(request.POST)
-        if pic_upload_form.is_valid():
-            picture = Picture(
-                name=pic_upload_form.cleaned_data["image"].name,
-                description=pic_upload_form.cleaned_data["description"],
-                image=pic_upload_form.cleaned_data["image"],
-                album=album,
-            )
-            picture.save()
-            return redirect("main:albums", album_id=album_id)
+        print(request.FILES)
+        if True:
+            images = request.FILES.getlist("image[]")
+            print(f"images={images}")
+            for image in images:
+                picture = Picture(
+                    name=image.name,
+                    description="",
+                    image=image,
+                    album=album,
+                )
+                picture.save()
+            return JsonResponse({"success": True, "redirect_url": reverse("main:albums", args=[album.id])})
         else:
-            return HttpResponse("Upload fail")
+            print(f"invalid form")
+            return HttpResponse("Upload fail: invalid form")
     form = PictureForm()
     pictures = (
         Picture.objects.filter(album=album)
