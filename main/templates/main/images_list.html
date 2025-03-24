@@ -8,7 +8,7 @@
         <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
         <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
           <li>
-            <button class="dropdown-item btn-viewdetails" onclick="event.stopPropagation()" data-picture-id="{{ picture.id }}">详情</button>
+            <button class="dropdown-item btn-viewdetails" data-picture-id="{{ picture.id }}">详情</button>
           </li>
           <li>
             <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
@@ -16,36 +16,60 @@
         </ul>
       </div>
     </div>
-    <div id="overlay-{{ picture.id }}" class="overlay">
+    <div id="overlay-view-detail" class="overlay">
       <div class="popup">
         <p class="popup_title">相片详情</p>
         <div class="popup-content">
           <div class="album-name">
-            <label for="name">上传日期:</label>
-            <span id="name">{{ picture.uploaded_at }}</span>
+            <label for="upload-date">上传日期:</label>
+            <span id="upload-date"></span>
           </div>
           <div class="album-name">
             <label for="album">所属相册:</label>
-            <span id="album">{{ picture.album.name }}</span>
+            <span id="album"></span>
           </div>
-          <form action="#" method="post">
+          <form action="#" method="post" id="form-picture-detail">
             {% csrf_token %}
             <div class="album-description">
-              <label for="description">备注:</label>
-              <input type="text" id="description" name="description" value="{{ album.name }}" />
+              <label for="detail-description">备注:</label>
+              <input type="text" id="detail-description" name="description" value="" />
             </div>
-            <div class="tag-area" id="picture-tag">
-              {% for tag in picture.tag.all %}
-                <a class="tag-item" href="#">#{{ tag.name }}</a>
-              {% endfor %}
+            <div class="picture-tag-wrapper">
+              <div class="album-tag tag-area" id="picture-tag"></div>
+              <input class="add-tag" id="input-add-tag" type="text" name="tag" />
             </div>
             <div class="popup_btn">
-              <button class="confirmBtn" type="submit" data-picture-id="{{ picture.id }}">保存</button>
-              <button class="cancelBtn" type="button" data-picture-id="{{ picture.id }}">取消</button>
+              <button class="confirmBtn" id="save-detail-changes" type="submit">保存</button>
+              <button class="cancelBtn" id="hide-details" type="button">取消</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   {% endfor %}
+</div>
+<div id="modal" class="modal">
+  <!-- 关闭按钮 -->
+  <span class="close" id="close-modal">&times;</span>
+  <div class="picture-content">
+    <!-- 用于放大查看的图片 -->
+    <div class="arrow arrow-left"></div>
+    <img src="#" class="modal-content" id="modalImage" />
+    <div class="text-area">
+      <div class="text-info-1">
+        <label for="modal-album">所属相册:</label>
+        <span id="modal-album"></span>
+      </div>
+      <div class="text-info-1">
+        <label for="modal-upload-date">上传日期:</label>
+        <span id="modal-upload-date"></span>
+      </div>
+      <div class="text-info-1">
+        <label for="modal-description">备注:</label>
+        <input type="text" id="modal-description" />
+      </div>
+      <div class="tag-area" style="margin: 5px;" id="modal-tag-area"></div>
+      <hr />
+    </div>
+  </div>
 </div>

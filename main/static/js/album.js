@@ -45,13 +45,13 @@ $(document).ready(function () {
         })
     });
 
-    $("#close-modal").click(function (e) {
+    $(document).on("click", "#close-modal", function (e) {
         $(".modal").hide();
     })
 
-    $(".btn-viewdetails").click(function (e) {
+    $(document).on("click", ".btn-viewdetails", function (e) {
+        e.stopPropagation();
         var pictureId = $(this).data("picture-id");
-
         $("#form-picture-detail").attr("action", viewPictureDetail + "?picture_id=" + pictureId)
         $.ajax({
             url: viewPictureDetail + "?picture_id=" + pictureId,
@@ -72,7 +72,6 @@ $(document).ready(function () {
                     // console.log("html tag: ", htmlTag);
                     $("#overlay-view-detail").show();
                     $("#picture-tag").html(htmlTag);
-
                 } else {
                     console.log("No image found");
                 }
@@ -80,13 +79,14 @@ $(document).ready(function () {
         })
     });
 
-    $("#hide-details").click(function (e) {
+    $(document).on("click", "#hide-details", function (e) {
         $("#overlay-view-detail").hide();
         $("#input-add-tag").val("");
         $("#input-add-tag").hide();
     });
 
-    $(".picture-tag-wrapper").on("click", ".btn-add-tag", function (e) {
+    $(document).on("click", ".btn-add-tag", function (e) {
+        console.log("click");
         $("#input-add-tag").show();
     });
 
@@ -101,7 +101,6 @@ $(document).ready(function () {
         for (let i = 0; i < files.length; i++) {
             let fileIndex = imgFiles.length;
             let file = files[i];
-
             if (file) {
                 imgFiles.push(file);
                 let reader = new FileReader();

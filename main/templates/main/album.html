@@ -53,7 +53,6 @@
           <div class="popup" style="max-width: none;width: 700px;">
             <div class="head d-flex justify-content-between align-items-center" style="margin: 0 10px;">
               <p class="popup_title" style="border-bottom: none;text-align: left;">上传至: {{ album.name }}</p>
-            
             </div>
             <hr style="margin: 0;" />
             <form action="#" method="post" enctype="multipart/form-data">
@@ -77,8 +76,8 @@
                         <path d="M479.872 288h32v480h-32z" fill="#E8E8E8" p-id="3109"></path>
                       </svg>
                     </button>
-                    {% comment %} <input style="display: none;" type="file" name="image" id="upload-single-image" accept="image/*" multiple/> {% endcomment %}
-                    <input style="display: none;" type="file" id="upload-single-image" accept="image/*" multiple/>
+                    {% comment %} <input style="display: none;" type="file" name="image" id="upload-single-image" accept="image/*" multiple /> {% endcomment %}
+                    <input style="display: none;" type="file" id="upload-single-image" accept="image/*" multiple />
                     <input style="display: none;" type="file" name="description" />
                   </div>
                 </div>
@@ -105,10 +104,10 @@
           <div class="picture-wrapper">
             <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}"></div>
             <div class="dropdown-area dropdown dropdown-menu-end">
-              <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
+              <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" type="button" onclick="event.stopPropagation()"></button>
               <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
                 <li>
-                  <button class="dropdown-item btn-viewdetails" onclick="event.stopPropagation()" data-picture-id="{{ picture.id }}">详情</button>
+                  <button class="dropdown-item btn-viewdetails" type="button" data-picture-id="{{ picture.id }}">详情</button>
                 </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
