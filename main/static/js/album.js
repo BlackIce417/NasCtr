@@ -13,14 +13,14 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".picture-item", function (e) {
-        $(".modal").show()
+        $(".modal-c").show()
         var pictureId = $(this).data("picture-id");
         // console.log(pictureId);
         $.ajax({
             url: viewPictureModalUrl + "?picture_id=" + pictureId,
             method: "GET",
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 if (data.picture) {
                     $(".modal-content").attr("src", data.picture.image_url);
                     var uploadDate = new Date(data.picture.uploaded_at);
@@ -45,8 +45,8 @@ $(document).ready(function () {
         })
     });
 
-    $(document).on("click", "#close-modal", function (e) {
-        $(".modal").hide();
+    $("#close-modal").click(function (e) {
+        $(".modal-c").hide();
     })
 
     $(document).on("click", ".btn-viewdetails", function (e) {

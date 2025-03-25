@@ -223,7 +223,7 @@
 }
 
 /* 模态框样式 */
-.modal {
+.modal-c {
     display: none;
     /* 默认隐藏模态框 */
     position: fixed;
@@ -294,13 +294,13 @@
     /* 更改悬浮时的颜色 */
 }
 
-.modal .picture-content {
+.modal-c .picture-content {
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
 
-.modal .picture-content .text-area {
+.modal-c .picture-content .text-area {
     width: 300px;
     height: 700px;
     background-color: #ffffff;
@@ -308,7 +308,7 @@
     border-radius: 5px;
 }
 
-.modal .picture-content .text-area .text-info-1 {
+.modal-c .picture-content .text-area .text-info-1 {
     margin: 5px;
 }
 
