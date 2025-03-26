@@ -1,4 +1,4 @@
-<a href="{% url 'main:create_album' %}" class="btn btn-primary">新建相册</a>
+<a href="{% url 'main:create_album' %}" class="btn btn-primary" target="_blank">新建相册</a>
 <hr />
 <div class="album-list" id="album-list">
   {% for album in albums %}
@@ -10,21 +10,21 @@
         <p class="card-text" style="margin: 5px 0 0 0;">{{ album.album.description }}</p>
         <small>{{ album.album.created_at|date:'Y-m-d H:i' }}</small>
         <a href="{% url 'main:albums' album.album.id %}" class="btn btn-primary">查看</a>
-        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">删除</button>
+        <button class="btn btn-danger" data-album-id="{{album.album.id}}" data-album-name="{{album.album.name}}" data-bs-toggle="modal" data-bs-target="#confirmDeleteAlbumModal">删除</button>
       </div>
     </div>
   {% endfor %}
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteAlbumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">确认删除？</h1>
+        <h1 class="modal-title fs-5" id="confirmDeleteModalLabel">确认删除？</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确认删除</button>
+        <button type="button" class="btn btn-danger" id="btn-delete-album">确认删除</button>
       </div>
     </div>
   </div>

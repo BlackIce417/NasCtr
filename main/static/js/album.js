@@ -1,5 +1,7 @@
 $(document).ready(function () {
     let csrftoken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+    var searchUrl = "/search";
+    
     $(".btn-edit-albuminfo").click(function () {
         $("#overlay").show()
     })
@@ -30,6 +32,7 @@ $(document).ready(function () {
                     let htmlTag = data.picture.tags.map(tag => {
                         return $("<a></a>")
                             .attr("href", "#")
+                            .addClass("tag-link")
                             .text(`#${tag}`)
                             .prop("outerHTML");
                     }).join("");
@@ -45,7 +48,13 @@ $(document).ready(function () {
         })
     });
 
-    $("#close-modal").click(function (e) {
+    $(document).on("click", ".tag-link", function (e) {
+        e.preventDefault();
+        let tag = $(this).text();
+        window.location.href = "/?q=" + encodeURIComponent(tag);
+    });
+
+    $(document).on("click", "#close-modal", function (e) {
         $(".modal-c").hide();
     })
 
@@ -66,6 +75,7 @@ $(document).ready(function () {
                     let htmlTag = data.picture.tags.map(tag => {
                         return $("<a></a>")
                             .attr("href", "#")
+                            .addClass("tag-link")
                             .text(`#${tag}`)
                             .prop("outerHTML");
                     }).join("") + '<button class="btn-add-tag" type="button" >添加</button>';

@@ -134,7 +134,7 @@ def edit_album(request):
 def delete_album(request):
     album = Album.objects.get(id=request.GET.get("album"))
     album.delete()
-    return redirect("main:usercenter")
+    return JsonResponse({"success": True})
 
 
 @login_required(login_url="/login/")

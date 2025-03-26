@@ -7,21 +7,37 @@
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
     <title>New Album</title>
   </head>
+  <style>
+    .wrapper {
+      margin: auto;
+      width: 50%;
+    }
+
+    .wrapper label {
+      width: 50px;
+    }
+
+    .wrapper .info-box {
+      margin: 10px 0;
+    }
+  </style>
   <body>
     <div class="container">
+      <h1 style="text-align: center;">创建相册</h1>
+      <hr />
       <form action="#" method="post">
         {% csrf_token %}
-        <div class="name">
-          <div class="album-name">
-            <label for="album-name">Name:</label>
+        <div class="wrapper">
+          <div class="info-box">
+            <label for="album-name">名称:</label>
             <input type="text" id="album-name" name="album-name"/>
           </div>
-          <div class="description">
-            <label for="album-dscription">Description:</label>
-            <textarea name="album-description" id="album-description"></textarea>
+          <div class="info-box">
+            <label for="album-description">备注:</label>
+            <input name="album-description" id="album-description">
           </div>
           <div class="images"></div>
-          <button type="submit">保存</button>
+          <button class="btn btn-primary" type="submit">保存</button>
         </div>
       </form>
     </div>

@@ -1,7 +1,6 @@
 $(document).ready(function () {
-
-    loadAlbums();
-
+    let csrftoken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+    searchTag();
     $("#load-albums").click(function (e) {
         e.preventDefault();
         loadAlbums();
@@ -30,13 +29,13 @@ $(document).ready(function () {
     $(document).on("click", ".btn-viewdetails", function (e) {
         console.log("View details clicked");
         let pictureId = $(this).data("picture-id");
-        let overlayId = $("#overlay-"+pictureId);
+        let overlayId = $("#overlay-" + pictureId);
         overlayId.show()
     });
 
     $(document).on("click", ".confirmBtn, .cancelBtn", function (e) {
         let pictureId = $(this).data("picture-id");
-        let overlayId = $("#overlay-"+pictureId);
+        let overlayId = $("#overlay-" + pictureId);
         overlayId.hide()
     })
 
@@ -49,15 +48,35 @@ $(document).ready(function () {
             method: "GET",
             data: { q: q },
             success: function (data) {
-                // $("#picture-area").html(data);
                 showPictureArea(data);
-                // console.log(data);
             },
             error: function (error) {
                 console.log(error);
             }
         })
     });
+
+    $(document).on("show.bs.modal", function (e) {
+        var btn = $(e.relatedTarget);
+        var albumId = btn.data("album-id");
+        var albumName = btn.data("album-name");
+        $(this).find("#confirmDeleteModalLabel").text("确认删除相册 " + albumName + " 吗？");
+        $("#btn-delete-album").off("click").on("click", function (e) {
+            $.ajax({
+                url: deleteAlbumUrl + albumId,
+                method: "POST",
+                data: { csrfmiddlewaretoken: csrftoken },
+                success: function (data) {
+                    if (data.success) {
+                        location.reload();
+                    }
+                },
+                error: function (error) {
+                    alert("删除相册失败: " + error);
+                }
+            });
+        });
+    })
 });
 
 function loadAlbums() {
@@ -84,5 +103,16 @@ function showPictureArea(data) {
     $("#picture-area").show();
 }
 
+function searchTag() {
+    var searchKeyword = new URLSearchParams(window.location.search).get("q");
+    if (searchKeyword) {
+        $("#search").val(searchKeyword);
+        setTimeout(() => {
+            $("#btn-search").trigger("click");
+        }, 50);
+    } else {
+        loadAlbums();
+    }
+}
 
 
