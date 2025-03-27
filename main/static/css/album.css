@@ -5,10 +5,16 @@
     margin: 10px 0 0 0;
 }
 
-.album-nav .album-info .btn-edit-albuminfo {
+.album-nav .album-info .album-head .btn-edit-albuminfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0;
+    margin: 0 10px;
     border: 0;
     background-color: transparent;
+    height: 20px;
+    width: 20px;
 }
 
 #uploadimg .upload-box {
@@ -117,6 +123,11 @@
 
 .popup .album-description label {
     margin: 0 10px;
+}
+
+.popup .album-description input {
+    margin: 0 10px;
+    flex: 1;
 }
 
 .popup .album-tag {
