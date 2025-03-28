@@ -1,3 +1,7 @@
+hr {
+    margin: 10px 0;
+}
+
 .search-box {
     display: flex;
     justify-content: center;
@@ -7,6 +11,7 @@
 
 .search-box input {
     margin-right: 5px;
+    width: 200px;
 }
 
 .btn-upload-single-img {
@@ -18,4 +23,27 @@
     align-items: center;
     border: none;
     background-color: transparent;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }

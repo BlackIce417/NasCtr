@@ -75,7 +75,7 @@ def album(request, album_id):
     album = Album.objects.get(host=request.user, id=album_id)
     if request.method == "POST":
         pic_upload_form = PictureForm(request.POST, request.FILES)
-        print(request.FILES)
+        # print(request.FILES)
         if True:
             images = request.FILES.getlist("image[]")
             print(f"images={images}")
@@ -87,17 +87,29 @@ def album(request, album_id):
                     album=album,
                 )
                 picture.save()
-            return JsonResponse({"success": True, "redirect_url": reverse("main:albums", args=[album.id])})
+            return JsonResponse(
+                {
+                    "success": True,
+                    "redirect_url": reverse("main:albums", args=[album.id]),
+                }
+            )
         else:
             print(f"invalid form")
             return HttpResponse("Upload fail: invalid form")
-    form = PictureForm()
-    pictures = (
-        Picture.objects.filter(album=album)
-        .exclude(picture_type="default_cover")
-        .order_by("-uploaded_at")
-    )
-    context = {"album": album, "pic_form": form, "pictures": pictures}
+    search = request.GET.get("search")
+    if search:
+        pictures = (
+            Picture.objects.filter(album=album, tag=search)
+            .exclude(picture_type="default_cover")
+            .order_by("-uploaded_at")
+        )
+    else:
+        pictures = (
+            Picture.objects.filter(album=album)
+            .exclude(picture_type="default_cover")
+            .order_by("-uploaded_at")
+        )
+    context = {"album": album, "pictures": pictures}
     return render(request, "main/album.html", context)
 
 
@@ -171,6 +183,7 @@ def load_albums(request):
     context = {"albums": album}
     return render(request, "main/album_list.html", context)
 
+
 @login_required(login_url="/login/")
 def view_picture_modal(reqeust):
     picture_id = reqeust.GET.get("picture_id")
@@ -201,7 +214,7 @@ def view_picture_detail(request):
     if request.method == "POST":
         description = request.POST["description"]
         picture.description = description
-        tags = [name.strip() for name in request.POST["tag"].split(",") if name.strip() ]
+        tags = [name.strip() for name in request.POST["tag"].split(",") if name.strip()]
         # print(f"tag={tag}")
         for tag in tags:
             t, created = Tag.objects.get_or_create(name=tag)
@@ -222,7 +235,7 @@ def view_picture_detail(request):
 
 @login_required(login_url="/login/")
 def search(request):
-    q=request.GET.get("q")
+    q = request.GET.get("q")
     print(f"{request.GET}")
     if q is None:
         return HttpResponse("No query")
