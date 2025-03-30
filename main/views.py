@@ -32,6 +32,13 @@ def _logout(request):
 @login_required(login_url="/login/")
 def index(request):
     user = request.user
+    if request.method == "POST":
+        name = request.POST["name"]
+        try:
+            user.username = name
+            user.save()
+        except Exception as e:
+            return HttpResponse(f"修改失败: {e}")
     context = {
         "user": user,
     }

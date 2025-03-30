@@ -47,3 +47,12 @@ hr {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+.input-box {
+    display: flex;
+    align-items: center;
+}
+
+.input-box input {
+    flex-grow: 1;
+}

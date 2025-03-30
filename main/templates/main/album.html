@@ -45,7 +45,7 @@
             </div>
           </form>
         </div>
-        <span style="text-align: center;">{{ album.host.username }}</span>
+        <a href="{% url 'main:usercenter' %}" style="text-align: center;color: #000;text-decoration: none;">{{ album.host.username }}</a>
       </nav>
       <hr />
       <div class="album-options">
@@ -123,7 +123,6 @@
           </div>
         {% endfor %}
         <div id="modal" class="modal-c">
-          <!-- 关闭按钮 -->
           <span class="close" id="close-modal">&times;</span>
           <div class="picture-content">
             <!-- 用于放大查看的图片 -->
@@ -132,7 +131,7 @@
             <div class="text-area">
               <div class="text-info-1">
                 <label for="modal-album">所属相册:</label>
-                <span id="modal-album"></span>
+                <a href="{% url 'main:albums' album.id %}" style="text-decoration: none;color: #000;" id="modal-album"></a>
               </div>
               <div class="text-info-1">
                 <label for="modal-upload-date">上传日期:</label>
