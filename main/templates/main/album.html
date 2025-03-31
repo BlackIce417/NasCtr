@@ -51,7 +51,7 @@
       <div class="album-options">
         <form action="{% url 'main:albums' album.id %}" method="get">
           <div class="search-box">
-            <input type="text" name="search" placeholder="在&quot;{{ album.name }}&quot;中搜索">
+            <input type="text" name="search" placeholder="在&quot;{{ album.name }}&quot;中搜索" />
             <button class="btn btn-primary btn-sm" type="submit">搜索</button>
           </div>
         </form>
@@ -139,7 +139,7 @@
               </div>
               <div class="text-info-1">
                 <label for="modal-description">备注:</label>
-                <input type="text" id="modal-description" />
+                <span type="text" id="modal-description"></span>
               </div>
               <div class="tag-area" style="margin: 5px;" id="modal-tag-area"></div>
               <hr />

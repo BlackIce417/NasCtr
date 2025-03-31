@@ -28,7 +28,12 @@ $(document).ready(function () {
                     var uploadDate = new Date(data.picture.uploaded_at);
                     $("#modal-upload-date").text((uploadDate.toLocaleString()));
                     $("#modal-album").text(data.picture.belongs_to);
-                    $("#modal-description").val(data.picture.description);
+                    if (data.picture.description) {
+                        $("#modal-description").text(data.picture.description);
+                    } else {
+                        $("#modal-description").text("无");
+                    }
+                    
                     let htmlTag = data.picture.tags.map(tag => {
                         return $("<a></a>")
                             .attr("href", "#")

@@ -63,9 +63,9 @@ class Album(models.Model):
     class Meta: 
         verbose_name = "相册"
 
-def upload_to(instance, filename):
-    # 路径格式：<appname>/static/media/album/<album_id>/<filename>
-    return f'{instance._meta.app_label}/album/{instance.album.id}/{filename}'
+# def upload_to(instance, filename):
+#     # 路径格式：<appname>/static/media/album/<album_id>/<filename>
+#     return f'{instance._meta.app_label}/album/{instance.album.id}/{filename}'
 
 
 @deconstructible
@@ -76,9 +76,19 @@ class HashUploadTo:
         
         # 计算文件内容的哈希值
         hash_value = self.get_file_hash(instance.image,)
-        
+         
         # 使用哈希值作为文件名
         file_extension = os.path.splitext(filename)[1]  # 获取文件扩展名
+        if hasattr(instance, 'image'):
+            folder = "image"
+            file_field = instance.image
+        elif hasattr(instance, 'video'):
+            folder = "video"
+            file_field = instance.video
+        else:
+            raise ValidationError("Unsupported file type.")
+         
+       
         return f'{instance._meta.app_label}/album/{instance.album.id}/{hash_value}{file_extension}'
     
     def get_file_hash(self, file,):
@@ -130,4 +140,15 @@ class Tag(models.Model):
     class Meta:
         verbose_name = '标签'
         verbose_name_plural = '标签'
+
+class Video(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='videos', verbose_name='相册')
+    name = models.CharField(max_length=100, verbose_name='视频名称', blank=True, null=True)
+    video = models.FileField(upload_to=HashUploadTo(), verbose_name='视频')
+    upload_at = models.DateTimeField(auto_now_add=True, verbose_name='上传于')
+    description = models.TextField(blank=True, null=True, verbose_name='描述')
+    tag = models.ManyToManyField('Tag', blank=True, verbose_name='标签', related_name="videos")
+
+    def __str__(self):
+        return self.name if self.name else os.path.basename(self.video.name)
 

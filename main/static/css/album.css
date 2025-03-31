@@ -313,6 +313,7 @@
 
 .modal-c .picture-content .text-area {
     width: 300px;
+    min-width: 300px;
     height: 700px;
     background-color: #ffffff;
     margin: auto 0 auto 5px;
@@ -321,6 +322,11 @@
 
 .modal-c .picture-content .text-area .text-info-1 {
     margin: 5px;
+    display: flex;
+}
+
+.modal-c .picture-content .text-area .text-info-1 span {
+    margin: 0 5px;
 }
 
 .picture-wrapper {
