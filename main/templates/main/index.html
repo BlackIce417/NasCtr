@@ -14,16 +14,19 @@
   <body>
     <div class="container">
       <head>
-        <nav>
-          <ul>
-            <li>
-              <a href="#" id="load-albums">相册</a>
+        <nav >
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#" id="load-home" datga-bs-toggle="tab">首页</a>
             </li>
-            <li>
-              <a href="#" id="load-pictures">照片</a>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="load-albums" datga-bs-toggle="tab">相册</a>
             </li>
-            <li>
-              <a href="#">视频</a>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="load-pictures" datga-bs-toggle="tab">照片</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" datga-bs-toggle="tab">视频</a>
             </li>
           </ul>
           <div class="search-box">
@@ -42,7 +45,7 @@
             </ul>
           </div>
           <div class="modal" id="setUserInfo" tabindex="-1" aria-labelledby="setUserInfo" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">修改信息</h1>
@@ -75,6 +78,7 @@
     </div>
   </body>
   <script src="{% static 'bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/index.js' %}"></script>
   <script src="{% static 'js/album.js' %}"></script>

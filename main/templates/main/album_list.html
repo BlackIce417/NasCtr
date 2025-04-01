@@ -1,4 +1,8 @@
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAlbumModal">新建相册</button>
+<div class="info">
+  <h5 style="margin: 0;">所有相册:</h5>
+  <span style="color: #ccc;margin: 0 10px;">共{{albums_count}}个</span>
+  <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createAlbumModal">新建相册</button>
+</div>
 <hr />
 <div class="album-list" id="album-list">
   {% for album in albums %}

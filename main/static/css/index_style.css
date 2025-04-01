@@ -63,3 +63,8 @@ nav a {
     background-color: transparent;
     padding: 0
 }
+
+.info {
+    display: flex;
+    align-items: center;
+}

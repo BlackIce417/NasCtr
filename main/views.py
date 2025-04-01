@@ -164,7 +164,7 @@ def load_pictures(request):
     pictures = Picture.objects.filter(
         album__in=album, picture_type="user_upload"
     ).order_by("-uploaded_at")
-    context = {"pictures": pictures}
+    context = {"pictures": pictures, "pictures_count": len(pictures)}
     # print(f"{pictures}")
     return render(request, "main/images_list.html", context)
 
@@ -187,7 +187,7 @@ def load_albums(request):
                 }
             )
 
-    context = {"albums": album}
+    context = {"albums": album, "albums_count": len(album_list)}
     return render(request, "main/album_list.html", context)
 
 
