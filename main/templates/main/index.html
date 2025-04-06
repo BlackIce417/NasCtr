@@ -17,16 +17,16 @@
         <nav >
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link active" href="#" id="load-home" datga-bs-toggle="tab">首页</a>
+              <a class="nav-link active" href="#" id="load-home" data-bs-toggle="tab">首页</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="load-albums" datga-bs-toggle="tab">相册</a>
+              <a class="nav-link" href="#" id="load-albums" data-bs-toggle="tab">相册</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="load-pictures" datga-bs-toggle="tab">照片</a>
+              <a class="nav-link" href="#" id="load-pictures" data-bs-toggle="tab">照片</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" datga-bs-toggle="tab">视频</a>
+              <a class="nav-link" href="#" id="load-videos" data-bs-toggle="tab">视频</a>
             </li>
           </ul>
           <div class="search-box">
@@ -59,7 +59,6 @@
                       <input type="text" id="name" name="name" value="{{ user.username }}" />
                     </div>
                   </div>
-
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                     <button type="submit" class="btn btn-primary">确认修改</button>
@@ -74,17 +73,18 @@
       <div>
         <div class="album-area" id="album-area"></div>
         <div class="picture-area" id="picture-area"></div>
+        <div class="video-area" id="video-area"></div>
       </div>
     </div>
   </body>
   <script src="{% static 'bootstrap-5.3.0-alpha1-dist/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/index.js' %}"></script>
   <script src="{% static 'js/album.js' %}"></script>
   <script>
     var loadAlbumsUrl = "{% url 'main:load-albums' %}"
     var loadPicturesUrl = "{% url 'main:load-pictures' %}"
+    var loadVideosUrl = "{% url 'main:load-videos' %}"
     var viewPictureDetail = "{% url 'main:view-picture-detail' %}"
     var viewPictureModalUrl = "{% url 'main:view-picture-modal' %}"
   </script>

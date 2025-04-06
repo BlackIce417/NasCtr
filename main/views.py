@@ -86,14 +86,24 @@ def album(request, album_id):
         if True:
             images = request.FILES.getlist("image[]")
             print(f"images={images}")
-            for image in images:
-                picture = Picture(
-                    name=image.name,
-                    description="",
-                    image=image,
-                    album=album,
-                )
-                picture.save()
+            for file in images:
+                mime = file.content_type
+                if mime.startswith("image"):
+                    picture = Picture(
+                        name=file.name,
+                        description="",
+                        image=file,
+                        album=album,
+                    )
+                    picture.save()
+                elif mime.startswith("video"):
+                    video = Video(
+                        name=file.name,
+                        description="",
+                        video=file,
+                        album=album,
+                    )
+                    video.save()
             return JsonResponse(
                 {
                     "success": True,
@@ -189,6 +199,13 @@ def load_albums(request):
 
     context = {"albums": album, "albums_count": len(album_list)}
     return render(request, "main/album_list.html", context)
+
+@login_required(login_url="/login/")
+def load_videos(request):
+    # videos = Video.objects.filter(host=request.user)
+    # context = {"videos": videos, "videos_count": len(videos)}
+    context = {}
+    return render(request, "main/video_list.html", context)
 
 
 @login_required(login_url="/login/")

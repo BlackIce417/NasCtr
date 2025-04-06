@@ -1,11 +1,20 @@
+let indexContent = "home";
+const indexContentDict = {
+    "home": "#album-area",
+    "albums": "#album-area",
+    "pictures": "#picture-area",
+    "videos": "#video-area",
+}
+
 $(document).ready(function () {
     let csrftoken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     searchTag();
+    // loadAlbums();
     $("#load-albums").click(function (e) {
         e.preventDefault();
         loadAlbums();
-        $("#picture-area").hide();
-        $("#album-area").show();
+        // $("#picture-area").hide();
+        // $("#album-area").show();
     })
 
     $("#load-pictures").click(function (e) {
@@ -16,8 +25,28 @@ $(document).ready(function () {
             method: "GET",
             success: function (data) {
                 // $("#picture-area").html(data);
-                showPictureArea(data);
+                // showPictureArea(data);
                 // console.log(data);
+                showIndexContent("pictures", "#picture-area", data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+        // $("#picture-area").show();
+    })
+
+    $("#load-videos").click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: loadVideosUrl,
+            method: "GET",
+            success: function (data) {
+                // var id = indexContentDict[indexContent]
+                // $(id).hide();
+                // $("#video-area").html(data);
+                // indexContent = "videos";
+                showIndexContent("videos", "#video-area", data);
             },
             error: function (error) {
                 console.log(error);
@@ -77,6 +106,7 @@ $(document).ready(function () {
             });
         });
     })
+
 });
 
 function loadAlbums() {
@@ -84,8 +114,9 @@ function loadAlbums() {
         url: loadAlbumsUrl,
         method: "GET",
         success: function (data) {
-            $("#album-area").html(data);
+            // $("#album-area").html(data);
             // console.log(data);
+            showIndexContent("albums", "#album-area", data);
         },
         error: function (error) {
             console.log(error);
@@ -114,5 +145,16 @@ function searchTag() {
         loadAlbums();
     }
 }
+
+function showIndexContent(content, areaId, data) {
+    // var id = indexContentDict[indexContent]
+    $(indexContentDict[indexContent]).hide();
+    // console.log(data)
+    $(areaId).html(data);
+    $(areaId).show();
+    indexContent = content;
+}
+
+
 
 

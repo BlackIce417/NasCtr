@@ -71,14 +71,8 @@ class Album(models.Model):
 @deconstructible
 class HashUploadTo:
     def __call__(self, instance, filename):
-        # 计算文件哈希
-        file_path = os.path.join(instance._meta.app_label, 'album', str(instance.album.id), filename)
-        
-        # 计算文件内容的哈希值
-        hash_value = self.get_file_hash(instance.image,)
-         
-        # 使用哈希值作为文件名
-        file_extension = os.path.splitext(filename)[1]  # 获取文件扩展名
+        file_extension = os.path.splitext(filename)[1]
+        folder = ""
         if hasattr(instance, 'image'):
             folder = "image"
             file_field = instance.image
@@ -87,17 +81,16 @@ class HashUploadTo:
             file_field = instance.video
         else:
             raise ValidationError("Unsupported file type.")
-         
-       
-        return f'{instance._meta.app_label}/album/{instance.album.id}/{hash_value}{file_extension}'
+        hash_value = self.get_file_hash(file_field,)
+        return f'{instance._meta.app_label}/album/{instance.album.id}/{folder}/{hash_value}{file_extension}'
     
     def get_file_hash(self, file,):
         """
         计算文件的哈希值
         """
-        hash_sha256 = hashlib.sha256()  # 使用SHA-256算法
+        hash_sha256 = hashlib.sha256()
         hash_sha256.update(str(datetime.now()).encode("utf-8"))
-        for chunk in file.chunks():  # 以块的方式读取文件内容
+        for chunk in file.chunks():
             hash_sha256.update(chunk)
         return hash_sha256.hexdigest()
 

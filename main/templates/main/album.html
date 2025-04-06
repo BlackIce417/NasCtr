@@ -55,6 +55,7 @@
             <button class="btn btn-primary btn-sm" type="submit">搜索</button>
           </div>
         </form>
+        {% comment %} 上传图片 {% endcomment %}
         <div class="overlay" id="uploadimg">
           <div class="popup" style="max-width: none;width: 700px;">
             <div class="head d-flex justify-content-between align-items-center" style="margin: 0 10px;">
@@ -83,7 +84,7 @@
                       </svg>
                     </button>
                     {% comment %} <input style="display: none;" type="file" name="image" id="upload-single-image" accept="image/*" multiple /> {% endcomment %}
-                    <input style="display: none;" type="file" id="upload-single-image" accept="image/*" multiple />
+                    <input style="display: none;" type="file" id="upload-single-image" accept="image/*, video/*" multiple />
                     <input style="display: none;" type="file" name="description" />
                   </div>
                 </div>
