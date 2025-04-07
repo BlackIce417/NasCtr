@@ -202,9 +202,11 @@ def load_albums(request):
 
 @login_required(login_url="/login/")
 def load_videos(request):
-    # videos = Video.objects.filter(host=request.user)
-    # context = {"videos": videos, "videos_count": len(videos)}
-    context = {}
+    album = Album.objects.filter(
+        host=request.user,
+    )
+    videos = Video.objects.filter(album__in=album).order_by("-upload_at")
+    context = {"videos": videos, "videos_count": len(videos)}
     return render(request, "main/video_list.html", context)
 
 

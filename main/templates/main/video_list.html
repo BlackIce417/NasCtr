@@ -1,7 +1,34 @@
 <div class="info">
   <h5 style="margin: 0;">所有视频:</h5>
-  <span style="color: #ccc;margin: 0 10px;">共xx张</span>
-    
+  <span style="color: #ccc;margin: 0 10px;">共{{ videos_count }}个</span>
 </div>
 <hr />
-<div class="video-list"></div>
+<div class="video-list">
+  {% for video in videos %}
+    <div class="video-wrapper">
+      <video class="video-thumb" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
+        <source src="{{ video.video.url }}#t=1" type="video/mp4" />
+      </video>
+      <div class="dropdown-area dropdown dropdown-menu-end">
+        <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
+        <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+          <li>
+            <button class="dropdown-item btn-viewdetails" data-picture-id="{{ picture.id }}">详情</button>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
+          </li>
+        </ul>
+      </div>
+      <div class="overlay">
+        <button class="btn-close-overlay" title="关闭">×</button>
+        <div class="video-container">
+          <video class="overlay-video" style="max-width: 700px;aspect-ratio: 16/9;object-fit: contain;" data-album-id="{{ video.video.id }}" preload="metadata" controls>
+            <source src="{{ video.video.url }}" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </div>
+
+  {% endfor %}
+</div>

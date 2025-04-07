@@ -59,6 +59,7 @@ $(document).ready(function () {
         console.log("View details clicked");
         let pictureId = $(this).data("picture-id");
         let overlayId = $("#overlay-" + pictureId);
+        console.log(overlayId);
         overlayId.show()
     });
 
@@ -106,6 +107,14 @@ $(document).ready(function () {
             });
         });
     })
+
+
+    $(document).on("click", ".video-thumb", function (e) {
+        console.log("Video thumbnail clicked");
+        const wrapper = $(this).closest(".video-wrapper");
+        const overlay = wrapper.find(".overlay");
+        overlay.show();
+    });
 
 });
 

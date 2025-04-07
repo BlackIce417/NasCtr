@@ -74,3 +74,58 @@ nav a {
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 }
+
+.video-wrapper {
+    position: relative;
+    display: inline-block;
+    height: 90px;
+    width: 160px;
+    background-color: #f1f1f1;
+}
+
+.video-wrapper .dropdown-area {
+    position: absolute;
+    display: none;
+    top: 1px;
+    right: 1px;
+    /* background-color: transparent; */
+}
+
+.video-wrapper .dropdown-area .btn-dropdown {
+    border: none;
+    background-color: #ffffff;
+}
+
+.video-wrapper:hover .dropdown-area {
+    display: flex;
+    /* opacity: 1; */
+}
+
+.video-wrapper .video-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: contain;
+}
+
+.video-wrapper .video-thumb:hover {
+    cursor: pointer;
+}
+
+.video-wrapper .btn-close-overlay {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    color: white;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.video-wrapper .video-container {
+    margin: 150px auto;
+}
+
+.video-wrapper .btn-close-overlay:hover {
+    cursor: pointer;
+}
