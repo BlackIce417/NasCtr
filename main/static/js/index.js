@@ -116,6 +116,19 @@ $(document).ready(function () {
         overlay.show();
     });
 
+    $(document).on("click", ".btn-close-video-overlay", function (e) {
+        const wrapper = $(this).closest(".video-wrapper");
+        const overlay = wrapper.find(".overlay");
+        overlay.hide();
+        $(this).find("video")[0].pause();
+    });
+
+    $(document).on("click", ".video-overlay", function (e) {
+        if (!$(e.target).closest(".video-container").length) {
+            $(".btn-close-video-overlay").click();
+        }
+    });
+
 });
 
 function loadAlbums() {

@@ -111,7 +111,7 @@ nav a {
     cursor: pointer;
 }
 
-.video-wrapper .btn-close-overlay {
+.video-wrapper .btn-close-video-overlay {
     position: absolute;
     top: 20px;
     right: 30px;
@@ -126,6 +126,6 @@ nav a {
     margin: 150px auto;
 }
 
-.video-wrapper .btn-close-overlay:hover {
+.video-wrapper .btn-close-video-overlay:hover {
     cursor: pointer;
 }
