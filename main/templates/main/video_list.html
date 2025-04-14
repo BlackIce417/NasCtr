@@ -13,22 +13,30 @@
         <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
         <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
           <li>
-            <button class="dropdown-item btn-viewdetails" data-picture-id="{{ picture.id }}">详情</button>
+            <button class="dropdown-item btn-viewdetails">详情</button>
           </li>
           <li>
-            <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
+            <a class="dropdown-item" href="#">删除</a>
           </li>
         </ul>
       </div>
       <div class="overlay video-overlay">
-        <button class="btn-close-video-overlay" title="关闭">&times;</button>
-        <div class="video-container">
-          <video class="overlay-video" style="max-width: 700px;aspect-ratio: 16/9;object-fit: contain;" data-album-id="{{ video.video.id }}" preload="metadata" controls>
+        <div class="video-container d-flex justify-content-center align-items-center">
+          <video class="overlay-video" style="max-width: 800px;aspect-ratio: 16/9;object-fit: contain;" data-video-id="{{ video.video.id }}" preload="metadata" controls>
             <source src="{{ video.video.url }}" type="video/mp4" />
           </video>
+          <div class="video-info-wrapper">
+            <div class="video-info">
+              <div class="info-wrapper-head">
+                <span>所属相册: </span>
+                <a href="{% url 'main:albums' video.album.id %}">{{ video.album.id }}</a>
+                <button class="btn-close-video-overlay" title="关闭">&times;</button>
+              </div>
+              <span>上传时间: {{video.upload_at | date:"Y/m/d H:i"}}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
   {% endfor %}
 </div>
