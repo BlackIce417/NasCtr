@@ -16,7 +16,7 @@
             <button class="dropdown-item btn-viewdetails">详情</button>
           </li>
           <li>
-            <a class="dropdown-item" href="#">删除</a>
+            <a class="dropdown-item" href="{% url 'main:delete-video' %}?video_id={{video.id}} ">删除</a>
           </li>
         </ul>
       </div>

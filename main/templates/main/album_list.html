@@ -10,7 +10,7 @@
       <img src="{{ album.album.cover.image.url }}" class="card-img-top card-img-1" alt="..." />
       <div class="card-body">
         <h5 class="card-title" style="margin: 0;">{{ album.album.name }}</h5>
-        <span class="picture-count">{{ album.count }} 张</span>
+        <span class="item-count">{{ album.count }} 个项目</span>
         <p class="card-text" style="margin: 5px 0 0 0;">{{ album.album.description }}</p>
         <small>{{ album.album.created_at|date:'Y-m-d H:i' }}</small>
         <a href="{% url 'main:albums' album.album.id %}" class="btn btn-primary">查看</a>

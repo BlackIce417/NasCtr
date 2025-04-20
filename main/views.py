@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet
 from django.urls import reverse
 
+from itertools import chain
+
 from .models import *
 from .forms import *
 
@@ -126,7 +128,20 @@ def album(request, album_id):
             .exclude(picture_type="default_cover")
             .order_by("-uploaded_at")
         )
-    context = {"album": album, "pictures": pictures}
+        videos = Video.objects.filter(album=album, tag=search).order_by("-uploaded_at")
+    for p in pictures:
+        p.media_type = "image"
+        p.created_at = p.uploaded_at
+    for v in videos:
+        v.media_type = "video"
+        v.created_at = v.uploaded_at
+    media = sorted(
+        chain(pictures, videos),
+        key=lambda x: x.created_at,
+        reverse=True,
+    )
+    print(f"media={media}")
+    context = {"album": album, "media": media}
     return render(request, "main/album.html", context)
 
 
@@ -188,24 +203,26 @@ def load_albums(request):
             pictures = Picture.objects.filter(
                 album=a, picture_type="user_upload"
             ).order_by("-uploaded_at")
+            videos_count = Video.objects.filter(album=a).count()
             album.append(
                 {
                     "album": a,
                     "album_cover": a.cover,
                     # "pictures": pictures,
-                    "count": len(pictures) if len(pictures) > 0 else 0,
+                    "count": len(pictures) + videos_count if len(pictures) > 0 else 0,
                 }
             )
 
     context = {"albums": album, "albums_count": len(album_list)}
     return render(request, "main/album_list.html", context)
 
+
 @login_required(login_url="/login/")
 def load_videos(request):
     album = Album.objects.filter(
         host=request.user,
     )
-    videos = Video.objects.filter(album__in=album).order_by("-upload_at")
+    videos = Video.objects.filter(album__in=album).order_by("-uploaded_at")
     context = {"videos": videos, "videos_count": len(videos)}
     return render(request, "main/video_list.html", context)
 
@@ -271,3 +288,11 @@ def search(request):
         context = {"pictures": pictures}
         return render(request, "main/images_list.html", context)
     return HttpResponse(f"Not found: {q}")
+
+
+@login_required(login_url="/login/")
+def delete_video(request):
+    video_id = request.GET.get("video_id")
+    video = Video.objects.get(id=video_id)
+    video.delete()
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))

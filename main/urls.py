@@ -23,6 +23,8 @@ urlpatterns = [
     path('view-picture-modal', views.view_picture_modal, name="view-picture-modal"),
     path('view-picture-detail', views.view_picture_detail, name="view-picture-detail"),
     path('search', views.search, name="search"),
+    path('delete-video', views.delete_video, name="delete-video"),
+    
 ]
 
 if settings.DEBUG:

@@ -138,10 +138,21 @@ class Video(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='videos', verbose_name='相册')
     name = models.CharField(max_length=100, verbose_name='视频名称', blank=True, null=True)
     video = models.FileField(upload_to=HashUploadTo(), verbose_name='视频')
-    upload_at = models.DateTimeField(auto_now_add=True, verbose_name='上传于')
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='上传于')
     description = models.TextField(blank=True, null=True, verbose_name='描述')
     tag = models.ManyToManyField('Tag', blank=True, verbose_name='标签', related_name="videos")
 
     def __str__(self):
         return self.name if self.name else os.path.basename(self.video.name)
+    
+
+    def delete(self, using = None, keep_parents = False):
+        if self.video:
+            path = self.video.path
+            if os.path.isfile(path):
+                os.remove(path)
+        return super().delete(using, keep_parents)
+
+    class Meta:
+        verbose_name = '视频'
 

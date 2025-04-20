@@ -55,7 +55,7 @@
             <button class="btn btn-primary btn-sm" type="submit">搜索</button>
           </div>
         </form>
-        {% comment %} 上传图片 {% endcomment %}
+        {% comment %}上传图片{% endcomment %}
         <div class="overlay" id="uploadimg">
           <div class="popup" style="max-width: none;width: 700px;">
             <div class="head d-flex justify-content-between align-items-center" style="margin: 0 10px;">
@@ -107,21 +107,32 @@
       </div>
       <hr />
       <div class="pictures-gallery">
-        {% for picture in pictures %}
-          <div class="picture-wrapper">
-            <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}"></div>
-            <div class="dropdown-area dropdown dropdown-menu-end">
-              <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" type="button" onclick="event.stopPropagation()"></button>
-              <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
-                <li>
-                  <button class="dropdown-item btn-viewdetails" type="button" data-picture-id="{{ picture.id }}">详情</button>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+        {% for item in media %}
+          {% if item.media_type == 'image' %}
+            {% with picture=item %}
+              <div class="picture-wrapper">
+                <div class="picture-item" id="picture-item" style="background-image: url({{ picture.image.url }});" data-picture-id="{{ picture.id }}"></div>
+                <div class="dropdown-area dropdown dropdown-menu-end">
+                  <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" type="button" onclick="event.stopPropagation()"></button>
+                  <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+                    <li>
+                      <button class="dropdown-item btn-viewdetails" type="button" data-picture-id="{{ picture.id }}">详情</button>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            {% endwith %}
+          {% elif item.media_type == 'video' %}
+            {% with video=item %}
+              {% comment %} <video class="video-thumb" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
+                <source src="{{ video.video.url }}#t=1" type="video/mp4" />
+              </video> {% endcomment %}
+              这是一个视频
+            {% endwith %}
+          {% endif %}
         {% endfor %}
         <div id="modal" class="modal-c">
           <span class="close" id="close-modal">&times;</span>
