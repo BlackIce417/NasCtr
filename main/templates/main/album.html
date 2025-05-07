@@ -11,7 +11,7 @@
     <title>Album</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container" style="min-width: 1200px;">
       <nav class="album-nav">
         <div class="album-info">
           <div class="album-head d-flex align-items-center">
@@ -97,7 +97,7 @@
           </div>
         </div>
         <div class="album-info-r d-flex justify-content-center align-items-center">
-          <span class="picture-count">共{{ pictures.count }}张</span>
+          <span class="picture-count">共{{ media_count.count }}张</span>
           <button class="btn-upload-single-img" style="border: none;background-color: transparent;width: 20px;height: 20px;" id="btn-uploadimg" type="button">
             <svg t="1742181099771" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1505" width="20" height="20">
               <path d="M351.232 325.632l122.88-148.48V706.56c0 22.528 14.336 36.864 37.888 36.864s37.888-14.336 37.888-36.864V177.152l122.88 148.48c14.336 14.336 37.888 14.336 52.224 0 14.336-14.336 14.336-36.864 0-52.224l-184.32-221.184C532.48 45.056 522.24 40.96 510.976 40.96s-22.528 4.096-29.696 11.264L299.008 273.408c-14.336 14.336-14.336 36.864 0 52.224 14.336 15.36 36.864 15.36 52.224 0z m583.68 307.2c-22.528 0-37.888 14.336-37.888 36.864v259.072H122.88V670.72c0-22.528-14.336-36.864-37.888-36.864s-36.864 14.336-36.864 36.864v296.96c0 22.528 14.336 36.864 37.888 36.864h849.92c22.528 0 37.888-14.336 37.888-36.864v-296.96c-1.024-22.528-15.36-37.888-38.912-37.888z" fill="#020202" p-id="1506"></path>
@@ -127,10 +127,39 @@
             {% endwith %}
           {% elif item.media_type == 'video' %}
             {% with video=item %}
-              {% comment %} <video class="video-thumb" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
-                <source src="{{ video.video.url }}#t=1" type="video/mp4" />
-              </video> {% endcomment %}
-              这是一个视频
+              <div class="video-wrapper" style="width: 100%;height: 100%;">
+                <video class="video-thumb" style="height: 100%;" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
+                  <source src="{{ video.video.url }}#t=1" type="video/mp4" />
+                </video>
+                <div class="dropdown-area dropdown dropdown-menu-end">
+                  <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
+                  <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+                    <li>
+                      <button class="dropdown-item btn-viewdetails">详情</button>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'main:delete-video' %}?video_id={{video.id}} ">删除</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="overlay video-overlay">
+                  <div class="video-container d-flex justify-content-center align-items-center">
+                    <video class="overlay-video" style="max-width: 800px;aspect-ratio: 16/9;object-fit: contain;" data-video-id="{{ video.video.id }}" preload="metadata" controls>
+                      <source src="{{ video.video.url }}" type="video/mp4" />
+                    </video>
+                    <div class="video-info-wrapper">
+                      <div class="video-info">
+                        <div class="info-wrapper-head">
+                          <span>所属相册: </span>
+                          <a href="{% url 'main:albums' video.album.id %}">{{ video.album.id }}</a>
+                          <button class="btn-close-video-overlay" title="关闭">&times;</button>
+                        </div>
+                        <span>上传时间: {{video.uploaded_at | date:"Y/m/d H:i"}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             {% endwith %}
           {% endif %}
         {% endfor %}

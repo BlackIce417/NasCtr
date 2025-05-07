@@ -32,7 +32,7 @@
                 <a href="{% url 'main:albums' video.album.id %}">{{ video.album.id }}</a>
                 <button class="btn-close-video-overlay" title="关闭">&times;</button>
               </div>
-              <span>上传时间: {{video.upload_at | date:"Y/m/d H:i"}}</span>
+              <span>上传时间: {{video.uploaded_at | date:"Y/m/d H:i"}}</span>
             </div>
           </div>
         </div>

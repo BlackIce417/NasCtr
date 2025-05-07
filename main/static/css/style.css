@@ -56,3 +56,83 @@ hr {
 .input-box input {
     flex-grow: 1;
 }
+
+.video-wrapper {
+    position: relative;
+    display: inline-block;
+    height: 90px;
+    width: 160px;
+    background-color: #f1f1f1;
+}
+
+.video-wrapper .dropdown-area {
+    position: absolute;
+    display: none;
+    top: 1px;
+    right: 1px;
+    /* background-color: transparent; */
+}
+
+.video-wrapper .dropdown-area .btn-dropdown {
+    border: none;
+    background-color: #ffffff;
+}
+
+.video-wrapper:hover .dropdown-area {
+    display: flex;
+    /* opacity: 1; */
+}
+
+.video-wrapper .video-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: contain;
+}
+
+.video-wrapper .video-thumb:hover {
+    cursor: pointer;
+}
+
+.video-wrapper .btn-close-video-overlay {
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    right: -5px;
+    top: -5px;
+    /* font-size: 30px;*/
+    color: rgb(146, 141, 141);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.video-wrapper .video-info-wrapper {
+    position: relative;
+    background-color: #ffffff;
+    height: 450px;
+    width: 250px;
+    margin-left: 5px;
+}
+
+.video-wrapper .video-info-wrapper .video-info {
+    margin: 5px 10px;
+}
+
+.video-wrapper .video-info-wrapper .info-wrapper-head {
+    position: relative;
+    width: 100%;
+}
+
+.video-wrapper .video-container {
+    margin: 150px auto;
+}
+
+.video-wrapper .btn-close-video-overlay:hover {
+    cursor: pointer;
+}
+
+.video-wrapper .overlay-video {
+    background-color: #000000;
+}

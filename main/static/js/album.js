@@ -176,6 +176,26 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".video-thumb", function (e) {
+        console.log("Video thumbnail clicked");
+        const wrapper = $(this).closest(".video-wrapper");
+        const overlay = wrapper.find(".overlay");
+        overlay.show();
+    });
+
+    $(document).on("click", ".btn-close-video-overlay", function (e) {
+        const wrapper = $(this).closest(".video-wrapper");
+        const overlay = wrapper.find(".overlay");
+        overlay.hide();
+        $(this).find("video")[0].pause();
+    });
+
+    $(document).on("click", ".video-overlay", function (e) {
+        if (!$(e.target).closest(".video-container").length) {
+            $(".btn-close-video-overlay").click();
+        }
+    });
+
 });
 function hidePopup(params) {
     $("#overlay").hide();

@@ -141,7 +141,7 @@ def album(request, album_id):
         reverse=True,
     )
     print(f"media={media}")
-    context = {"album": album, "media": media}
+    context = {"album": album, "media": media, "media_count": len(media)}
     return render(request, "main/album.html", context)
 
 
