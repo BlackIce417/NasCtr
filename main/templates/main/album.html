@@ -52,7 +52,7 @@
       <div class="album-options">
         <div class="search-box">
           <input type="text" id="search" name="search" placeholder="在&quot;{{ album.name }}&quot;中搜索" />
-          <button class="btn btn-primary btn-sm" id="search-in-album" type="button" data-album-id="{{album.id}}">搜索</button>
+          <button class="btn btn-primary btn-sm" id="search-in-album" type="button" data-album-id="{{ album.id }}">搜索</button>
         </div>
         {% comment %}上传图片{% endcomment %}
         <div class="overlay" id="uploadimg">
@@ -126,9 +126,39 @@
             {% endwith %}
           {% elif item.media_type == 'video' %}
             {% with video=item %}
-              {% comment %} <video class="video-thumb" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
-                <source src="{{ video.video.url }}#t=1" type="video/mp4" />
-              </video> {% endcomment %}这是一个视频
+              <div class="video-wrapper" style="width: 100%;height: 100%;">
+                <video class="video-thumb" style="height: 100%;" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
+                  <source src="{{ video.video.url }}#t=1" type="video/mp4" />
+                </video>
+                <div class="dropdown-area dropdown dropdown-menu-end">
+                  <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
+                  <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
+                    <li>
+                      <button class="dropdown-item btn-viewdetails">详情</button>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'main:delete-video' %}?video_id={{ video.id }} ">删除</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="overlay video-overlay">
+                  <div class="video-container d-flex justify-content-center align-items-center">
+                    <video class="overlay-video" style="max-width: 800px;aspect-ratio: 16/9;object-fit: contain;" data-video-id="{{ video.video.id }}" preload="metadata" controls>
+                      <source src="{{ video.video.url }}" type="video/mp4" />
+                    </video>
+                    <div class="video-info-wrapper">
+                      <div class="video-info">
+                        <div class="info-wrapper-head">
+                          <span>所属相册:</span>
+                          <a href="{% url 'main:albums' video.album.id %}">{{ video.album.id }}</a>
+                          <button class="btn-close-video-overlay" title="关闭">&times;</button>
+                        </div>
+                        <span>上传时间: {{ video.uploaded_at|date:'Y/m/d H:i' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             {% endwith %}
           {% endif %}
         {% endfor %}

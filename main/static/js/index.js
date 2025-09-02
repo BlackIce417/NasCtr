@@ -177,6 +177,13 @@ function showIndexContent(content, areaId, data) {
     indexContent = content;
 }
 
+const closeVideoOverlay = (element) => {
+    const wrapper = $(element).closest(".video-wrapper");
+    const overlay = wrapper.find(".overlay");
+    overlay.hide();
+    wrapper.find("video")[0].pause();
+}
+
 
 
 
