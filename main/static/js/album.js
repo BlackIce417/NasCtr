@@ -176,24 +176,27 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", ".video-thumb", function (e) {
-        console.log("Video thumbnail clicked");
-        const wrapper = $(this).closest(".video-wrapper");
-        const overlay = wrapper.find(".overlay");
-        overlay.show();
-    });
 
-    $(document).on("click", ".btn-close-video-overlay", function (e) {
-        const wrapper = $(this).closest(".video-wrapper");
-        const overlay = wrapper.find(".overlay");
-        overlay.hide();
-        $(this).find("video")[0].pause();
-    });
-
-    $(document).on("click", ".video-overlay", function (e) {
-        if (!$(e.target).closest(".video-container").length) {
-            $(".btn-close-video-overlay").click();
-        }
+    $("#search-in-album").click(function (e) {
+        e.preventDefault();
+        var q = $("#search").val();
+        var albumId = $(this).data("album-id"); 
+        console.log(albumId);
+        $.ajax({
+            url: "/search",
+            method: "GET",
+            data: { 
+                q: q,
+                album_id: albumId,
+             },
+            success: function (data) {
+                console.log(data);
+                $(".pictures-gallery").html(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
     });
 
 });
