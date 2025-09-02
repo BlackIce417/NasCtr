@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/album.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index_style.css' %}" />
     <title>Album</title>
   </head>
   <body>
@@ -49,12 +50,10 @@
       </nav>
       <hr />
       <div class="album-options">
-        <form action="{% url 'main:albums' album.id %}" method="get">
-          <div class="search-box">
-            <input type="text" name="search" placeholder="在&quot;{{ album.name }}&quot;中搜索" />
-            <button class="btn btn-primary btn-sm" type="submit">搜索</button>
-          </div>
-        </form>
+        <div class="search-box">
+          <input type="text" id="search" name="search" placeholder="在&quot;{{ album.name }}&quot;中搜索" />
+          <button class="btn btn-primary btn-sm" id="search-in-album" type="button" data-album-id="{{album.id}}">搜索</button>
+        </div>
         {% comment %}上传图片{% endcomment %}
         <div class="overlay" id="uploadimg">
           <div class="popup" style="max-width: none;width: 700px;">

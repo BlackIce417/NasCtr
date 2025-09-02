@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let csrftoken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     var searchUrl = "/search";
-    
+
     $(".btn-edit-albuminfo").click(function () {
         $("#overlay").show()
     })
@@ -33,7 +33,7 @@ $(document).ready(function () {
                     } else {
                         $("#modal-description").text("无");
                     }
-                    
+
                     let htmlTag = data.picture.tags.map(tag => {
                         return $("<a></a>")
                             .attr("href", "#")

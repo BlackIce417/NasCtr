@@ -278,14 +278,20 @@ def view_picture_detail(request):
 
 @login_required(login_url="/login/")
 def search(request):
-    q = request.GET.get("q")
     print(f"{request.GET}")
+    q = request.GET.get("q")
+    album_id = request.GET.get("album_id")
+    album = Album.objects.filter(id=album_id).first()
     if q is None:
         return HttpResponse("No query")
     if q[0] == "#":
         tag = q[1:]
-        pictures = Picture.objects.filter(tag__name=tag)
-        context = {"pictures": pictures}
+        if album is not None:
+            pictures = Picture.objects.filter(album=album, tag__name=tag)
+            print(f"album search: {pictures}")
+        else:
+            pictures = Picture.objects.filter(tag__name=tag)
+        context = {"pictures": pictures, "pictures_count": len(pictures), }
         return render(request, "main/images_list.html", context)
     return HttpResponse(f"Not found: {q}")
 
