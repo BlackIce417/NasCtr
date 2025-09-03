@@ -212,7 +212,7 @@ $(document).ready(function () {
             },
             success: function (data) {
                 console.log(data);
-                $(".pictures-gallery").html(data);
+                $(".pictures-gallery").replaceWith(data);
             },
             error: function (error) {
                 console.log(error);

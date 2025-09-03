@@ -211,7 +211,6 @@ def load_albums(request):
                     "count": len(pictures) + videos_count if len(pictures) > 0 else 0,
                 }
             )
-
     context = {"albums": album, "albums_count": len(album_list)}
     return render(request, "main/album_list.html", context)
 
