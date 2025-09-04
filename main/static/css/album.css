@@ -309,6 +309,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-c .picture-content .text-area {
