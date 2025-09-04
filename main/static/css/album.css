@@ -49,7 +49,7 @@
 }
 
 #uploadimg .input-field label {
-    width: 70px ;
+    width: 70px;
     text-align-last: justify;
     white-space: nowrap;
 }
@@ -195,10 +195,10 @@
 }
 
 .picture-item {
+    height: 100%;
     width: 100%;
-    aspect-ratio: 4/3;
+    /* aspect-ratio: 4/3; */
     display: inline-block;
-    border: 1px #f1f1f1 solid;
     background-repeat: no-repeat;
     background-origin: border-box;
     background-size: cover;
@@ -228,6 +228,17 @@
 .picture-wrapper:hover .dropdown-area {
     display: flex;
     /* opacity: 1; */
+}
+
+.picture-wrapper {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    /* height: 100%; */
+    width: 100%;
+    aspect-ratio: 4/3;
+    background-color: #f5f5f5;
+    border: 1px #f1f1f1 solid;
 }
 
 .upload-area {
@@ -265,7 +276,7 @@
 
 /* 模态框内放大的图片 */
 .modal-content {
-    margin: 0;
+    margin: auto 0;
     /* 居中对齐 */
     display: block;
     /* 块级显示 */
@@ -319,7 +330,13 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 1);
+    width: 1105px;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .modal-c .picture-content .text-area {
@@ -328,22 +345,35 @@
     height: 700px;
     background-color: #ffffff;
     margin: auto 0 auto 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
 }
 
 .modal-c .picture-content .text-area .text-info-1 {
     margin: 5px;
     display: flex;
+    position: relative;
 }
 
 .modal-c .picture-content .text-area .text-info-1 span {
     margin: 0 5px;
 }
 
-.picture-wrapper {
-    position: relative;
-    display: inline-block;
+.modal-c .picture-content .text-area .text-info-1 .btn-close-picture-modal {
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    right: -5px;
+    top: -5px;
+    /* font-size: 30px;*/
+    color: rgb(146, 141, 141);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
 }
+
+
 
 .picture-tag-wrapper {
     padding-left: 10px;

@@ -59,9 +59,15 @@ $(document).ready(function () {
         window.location.href = "/?q=" + encodeURIComponent(tag);
     });
 
-    $(document).on("click", "#close-modal", function (e) {
+    $(document).on("click", ".btn-close-picture-modal", function (e) {
         $(".modal-c").hide();
     })
+
+    $(document).on("click", ".modal-c", function (e) {
+        if (!$(e.target).closest(".picture-content").length) {
+            $(".btn-close-picture-modal").click();
+        }
+    });
 
     $(document).on("click", ".btn-viewdetails", function (e) {
         e.stopPropagation();
@@ -150,7 +156,7 @@ $(document).ready(function () {
         videoContainer.find("video")[0].pause();
     });
 
-    
+
     $(document).on("click", ".video-overlay", function (e) {
         if (!$(e.target).closest(".video-container").length) {
             $(".btn-close-video-overlay").click();
