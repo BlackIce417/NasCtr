@@ -140,7 +140,7 @@ def album(request, album_id):
         key=lambda x: x.created_at,
         reverse=True,
     )
-    context = {"album": album, "media": media}
+    context = {"album": album, "media": media, "media_count": len(media)}
     return render(request, "main/album.html", context)
 
 

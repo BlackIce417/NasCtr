@@ -5,6 +5,10 @@
     margin: 10px 0 0 0;
 }
 
+.album-nav .album-info .album-head {
+    align-items: flex-end;
+}
+
 .album-nav .album-info .album-head .btn-edit-albuminfo {
     display: flex;
     justify-content: center;
@@ -15,6 +19,12 @@
     background-color: transparent;
     height: 20px;
     width: 20px;
+}
+
+.album-nav .album-info .album-head .btn-back {
+    color: #9499a0;
+    font-size: 12px;
+    margin-top: auto;
 }
 
 #uploadimg .upload-box {

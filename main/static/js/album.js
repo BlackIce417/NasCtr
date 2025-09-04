@@ -149,6 +149,8 @@ $(document).ready(function () {
         overlay.hide();
         videoContainer.find("video")[0].pause();
     });
+
+    
     $(document).on("click", ".video-overlay", function (e) {
         if (!$(e.target).closest(".video-container").length) {
             $(".btn-close-video-overlay").click();
