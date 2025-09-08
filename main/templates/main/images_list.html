@@ -52,8 +52,6 @@
       </div>
     {% endfor %}
     <div id="modal" class="modal-c">
-      <!-- 关闭按钮 -->
-      <span class="close" id="close-modal">&times;</span>
       <div class="picture-content">
         <!-- 用于放大查看的图片 -->
         <div class="arrow arrow-left"></div>
@@ -62,6 +60,7 @@
           <div class="text-info-1">
             <label for="modal-album">所属相册:</label>
             <span id="modal-album"></span>
+            <button class="btn-close-picture-modal" title="关闭">&times;</button>
           </div>
           <div class="text-info-1">
             <label for="modal-upload-date">上传日期:</label>
@@ -69,7 +68,8 @@
           </div>
           <div class="text-info-1">
             <label for="modal-description">备注:</label>
-            <input type="text" id="modal-description" />
+            {% comment %} <input type="text" id="modal-description" /> {% endcomment %}
+            <span id="modal-description"></span>
           </div>
           <div class="tag-area" style="margin: 5px;" id="modal-tag-area"></div>
           <hr />

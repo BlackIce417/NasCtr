@@ -68,7 +68,7 @@ $(document).ready(function () {
             $(".btn-close-picture-modal").click();
         }
     });
-
+    // 点击详情
     $(document).on("click", ".btn-viewdetails", function (e) {
         e.stopPropagation();
         var pictureId = $(this).data("picture-id");

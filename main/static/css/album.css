@@ -349,13 +349,18 @@
 }
 
 .modal-c .picture-content .text-area .text-info-1 {
-    margin: 5px;
+    margin: 10px;
+    padding: 2px;
     display: flex;
     position: relative;
 }
 
 .modal-c .picture-content .text-area .text-info-1 span {
     margin: 0 5px;
+}
+
+.modal-c .picture-content .text-area .text-info-1 input {
+    max-height: 25px;
 }
 
 .modal-c .picture-content .text-area .text-info-1 .btn-close-picture-modal {
