@@ -1,6 +1,7 @@
 $(document).ready(function () {
     let csrftoken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     var searchUrl = "/search";
+    const urls = JSON.parse($("#urls").text());
 
     $(".btn-edit-albuminfo").click(function () {
         $("#overlay").show()
@@ -228,6 +229,31 @@ $(document).ready(function () {
         })
     });
 
+
+    $(document).on("click", ".delete-picture", function (e) {
+        e.preventDefault();
+        console.log("Delete picture", $(this).data("picture"));
+        if (!confirm("确定要删除这张图片吗？")) {
+            return;
+        }
+        $.ajax({
+            url: urls.deletePicture +  $(this).data("picture"),
+            method: "GET",
+            headers: { "X-CSRFToken": csrftoken },
+            success: function (data) {
+                console.log(data);
+                if (data.success) {
+                    alert("删除成功");
+                    window.location.reload();
+                } else {
+                    alert("删除失败: " + data.error);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    });
 });
 function hidePopup(params) {
     $("#overlay").hide();

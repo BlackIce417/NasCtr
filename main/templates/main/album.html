@@ -24,8 +24,14 @@
             </button>
             <a href="{% url 'main:usercenter' %}" class="btn-back">返回首页</a>
           </div>
-          <p style="color: #cccccc;margin: 0;font-size: 12px;">{% if album.description %}{{album.description}}{% else %}这个人很懒，没有写备注{% endif %}</p>
-          <form id="overlay" class="overlay" action="{% url 'main:edit-album' %}?album={{ album.id }}" method="post">
+          <p style="color: #cccccc;margin: 0;font-size: 12px;">
+            {% if album.description %}
+              {{ album.description }}
+            {% else %}
+              这个人很懒，没有写备注
+            {% endif %}
+          </p>
+          <form id="overlay" class="overlay" action="{% url 'main:edit-album' %}?album={{ album.id }}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="popup">
               <p class="popup_title">编辑相册信息</p>
@@ -118,7 +124,10 @@
                       <button class="dropdown-item btn-viewdetails" type="button" data-picture-id="{{ picture.id }}">详情</button>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
+                      <a class="dropdown-item set-to-cover" href="{% url 'main:edit-album' %}?album={{ album.id }}&cover={{ picture.id }}">设为封面</a>
+                    </li>
+                    <li>
+                      <button type="button" class="dropdown-item delete-picture" data-picture="{{ picture.id }}">删除</button>
                     </li>
                   </ul>
                 </div>
@@ -227,5 +236,10 @@
     var viewPictureModalUrl = "{% url 'main:view-picture-modal' %}"
     var viewPictureDetail = "{% url 'main:view-picture-detail' %}"
     var uploadImagesUrl = "{% url 'main:albums' album.id %}"
+  </script>
+  <script id="urls" type="application/json">
+    { 
+      "deletePicture": "{% url 'main:delete-picture' %}?picture="
+    }
   </script>
 </html>

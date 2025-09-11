@@ -150,11 +150,14 @@ def delete_picture(request):
     # print(f"{picture_id}")
     try:
         picture = Picture.objects.get(id=picture_id)
+        
     except Exception as e:
         return HttpResponse(f"Error: {e}")
+    album = picture.album
+    if album.cover == picture:
+        return JsonResponse({"success": False, "error": "不能删除作为相册封面的图片，请先更换相册封面。"})
     picture.delete()
-    referer_url = request.META.get("HTTP_REFERER", "/")
-    return HttpResponseRedirect(referer_url)
+    return JsonResponse({"success": True})
 
 
 @login_required(login_url="/login/")
@@ -170,6 +173,20 @@ def edit_album(request):
         album.name = name
         album.description = description
         album.save()
+    else:
+        try:
+            album = Album.objects.get(id=request.GET.get("album"))
+        except Exception as e:
+            return HttpResponse(f"Error: {e}")
+        cover_id = request.GET.get("cover")
+        if cover_id is not None:
+            try:
+                cover_picture = Picture.objects.get(id=cover_id, album=album)
+                album.cover = cover_picture
+                album.cover_type = "custom"
+                album.save()
+            except Exception as e:
+                return HttpResponse(f"Error: {e}")
     return redirect("main:albums", album_id=album.id)
 
 
