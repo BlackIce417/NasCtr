@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -11,6 +12,8 @@ from itertools import chain
 from .models import *
 from .forms import *
 
+from log.utils.log import log_event
+
 
 # Create your views here.
 
@@ -21,13 +24,16 @@ def _login(request):
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            log_event(user, level="INFO", message=f"User {username} logged in.")
             login(request, user)
             return redirect("main:usercenter")
     return render(request, "main/login.html")
 
 
 def _logout(request):
+    user = request.user
     logout(request)
+    log_event(user, level="INFO", message=f"User logged out.")
     return redirect("main:usercenter")
 
 
@@ -58,8 +64,10 @@ def register(request):
             )
             if not user.check_password(password):
                 return HttpResponse(f"Fail to register: {e}")
+            log_event(user, level="INFO", message=f"User {username} registered.")
         except Exception as e:
             return HttpResponse(f"Fail to register: {e}")
+        
     return redirect("main:login")
 
 
@@ -73,7 +81,9 @@ def create_album(request):
                 description=request.POST["album-description"],
             )
             new_album.save()
+            log_event(request.user, level="INFO", message=f"User {request.user.username} created album {new_album.name}.")
         except Exception as e:
+            log_event(request.user, level="ERROR", message=f"User {request.user.username} failed to create album: {e}.")
             return HttpResponse(f"Fail to create album: {e}")
         return redirect("main:usercenter")
     return render(request, "main/new_album.html")
@@ -87,6 +97,7 @@ def album(request, album_id):
         # print(request.FILES)
         if True:
             images = request.FILES.getlist("image[]")
+            uploaded_files = {"images": [], "videos": []}
             print(f"images={images}")
             for file in images:
                 mime = file.content_type
@@ -98,6 +109,7 @@ def album(request, album_id):
                         album=album,
                     )
                     picture.save()
+                    uploaded_files["images"].append(f"img: {picture.image.name}, id: {picture.id}")
                 elif mime.startswith("video"):
                     video = Video(
                         name=file.name,
@@ -106,6 +118,13 @@ def album(request, album_id):
                         album=album,
                     )
                     video.save()
+                    uploaded_files["videos"].append(f"video: {video.video.name}, id: {video.id}")
+            if uploaded_files["images"] or uploaded_files["videos"]:
+                log_event(
+                    request.user,
+                    level="INFO",
+                    message=f"User {request.user.username} uploaded files to album {album.name}: {json.dumps(uploaded_files)}",
+                )
             return JsonResponse(
                 {
                     "success": True,
