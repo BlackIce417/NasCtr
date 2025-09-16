@@ -7,7 +7,7 @@
 <div class="album-list" id="album-list">
   {% for album in albums %}
     <div class="card" style="width: 18rem;">
-      <img src="{{ album.album.cover.image.url }}" class="card-img-top card-img-1" alt="..." />
+      <img src="{{ album.album.cover.image.url }}" class="card-img-top card-img-1 album-card-cover" alt="..." />
       <div class="card-body">
         <h5 class="card-title" style="margin: 0;">{{ album.album.name }}</h5>
         <span class="item-count">{{ album.count }} 个项目</span>

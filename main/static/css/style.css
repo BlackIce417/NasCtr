@@ -145,3 +145,9 @@ hr {
 .video-wrapper .overlay-video {
     background-color: #000000;
 }
+
+.album-card-cover {
+    height: 240px;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}

@@ -135,7 +135,7 @@ def album(request, album_id):
             print(f"invalid form")
             return HttpResponse("Upload fail: invalid form")
     search = request.GET.get("search")
-    if search:
+    if False:
         pictures = (
             Picture.objects.filter(album=album, tag=search)
             .exclude(picture_type="default_cover")
@@ -160,6 +160,7 @@ def album(request, album_id):
         reverse=True,
     )
     context = {"album": album, "media": media, "media_count": len(media)}
+    # context = {"album": album, }
     return render(request, "main/album.html", context)
 
 
@@ -174,8 +175,11 @@ def delete_picture(request):
         return HttpResponse(f"Error: {e}")
     album = picture.album
     if album.cover == picture:
+        log_event(request.user, level="WARNING", message=f"User {request.user.username} tried to delete cover picture {picture.id} of album {album.name}.")
         return JsonResponse({"success": False, "error": "不能删除作为相册封面的图片，请先更换相册封面。"})
+    id = picture.id
     picture.delete()
+    log_event(request.user, level="INFO", message=f"User {request.user.username} deleted picture {id} from album {album.name}.")
     return JsonResponse({"success": True})
 
 
@@ -189,21 +193,32 @@ def edit_album(request):
             album = Album.objects.get(id=request.GET.get("album"))
         except Exception as e:
             return HttpResponse(f"Error: {e}")
-        album.name = name
-        album.description = description
+        log_info = []
+        if album.name != name:
+            album.name = name
+            log_info.append(f"name to {name}")
+        if album.description != description:
+            album.description = description
+            log_info.append(f"description to {description}")
         album.save()
+        for i in log_info:
+            log_event(request.user, level="INFO", message=f"User {request.user.username} changed album {album.name} {i}.")
     else:
         try:
             album = Album.objects.get(id=request.GET.get("album"))
+            old_cover = album.cover.id
         except Exception as e:
             return HttpResponse(f"Error: {e}")
         cover_id = request.GET.get("cover")
+        if old_cover == cover_id:
+            return redirect("main:albums", album_id=album.id)
         if cover_id is not None:
             try:
                 cover_picture = Picture.objects.get(id=cover_id, album=album)
                 album.cover = cover_picture
                 album.cover_type = "custom"
                 album.save()
+                log_event(request.user, level="INFO", message=f"User {request.user.username} changed cover of album {album.name} to picture from {old_cover} to {cover_picture.id}.")
             except Exception as e:
                 return HttpResponse(f"Error: {e}")
     return redirect("main:albums", album_id=album.id)
@@ -213,6 +228,7 @@ def edit_album(request):
 def delete_album(request):
     album = Album.objects.get(id=request.GET.get("album"))
     album.delete()
+    log_event(request.user, level="INFO", message=f"User {request.user.username} deleted album {album.name}.")
     return JsonResponse({"success": True})
 
 
@@ -225,7 +241,6 @@ def load_pictures(request):
         album__in=album, picture_type="user_upload"
     ).order_by("-uploaded_at")
     context = {"pictures": pictures, "pictures_count": len(pictures)}
-    # print(f"{pictures}")
     return render(request, "main/images_list.html", context)
 
 
@@ -282,7 +297,7 @@ def view_picture_modal(reqeust):
 
 
 @login_required(login_url="/login/")
-def view_picture_detail(request):
+def view_picture_detail(request): 
     picture_id = request.GET.get("picture_id")
     try:
         picture = Picture.objects.get(id=picture_id)
@@ -312,7 +327,7 @@ def view_picture_detail(request):
 
 @login_required(login_url="/login/")
 def search(request):
-    print(f"{request.GET}")
+    # print(f"{request.GET}")
     q = request.GET.get("q")
     album_id = request.GET.get("album_id")
     album = Album.objects.filter(id=album_id).first()
@@ -322,9 +337,11 @@ def search(request):
         tag = q[1:]
         if album is not None:
             pictures = Picture.objects.filter(album=album, tag__name=tag)
-            print(f"album search: {pictures}")
+            # print(f"album search: {pictures}")
+            log_event(request.user, level="INFO", message=f"User {request.user.username} searched for tag {tag} in album {album.name}.")
         else:
             pictures = Picture.objects.filter(tag__name=tag)
+            log_event(request.user, level="INFO", message=f"User {request.user.username} searched for tag {tag}.")
         context = {"pictures": pictures, "pictures_count": len(pictures), }
         return render(request, "main/images_list.html", context)
     return HttpResponse(f"Not found: {q}")
@@ -335,4 +352,5 @@ def delete_video(request):
     video_id = request.GET.get("video_id")
     video = Video.objects.get(id=video_id)
     video.delete()
+    log_event(request.user, level="INFO", message=f"User {request.user.username} deleted video {video_id} from album {video.album.name}.")
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
