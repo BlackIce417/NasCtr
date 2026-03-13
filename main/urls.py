@@ -24,6 +24,8 @@ urlpatterns = [
     path('view-picture-detail', views.view_picture_detail, name="view-picture-detail"),
     path('search', views.search, name="search"),
     path('delete-video', views.delete_video, name="delete-video"),
+    path('download-picture/<int:picture_id>', views.download_picture, name="download-picture"),
+    path('download-video/<int:video_id>', views.download_video, name="download-video"),
     
 ]
 

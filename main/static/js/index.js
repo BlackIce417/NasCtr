@@ -120,7 +120,10 @@ $(document).ready(function () {
         const wrapper = $(this).closest(".video-wrapper");
         const overlay = wrapper.find(".overlay");
         overlay.hide();
-        $(this).find("video")[0].pause();
+        const playingVideo = wrapper.find(".overlay-video")[0];
+        if (playingVideo) {
+            playingVideo.pause();
+        }
     });
 
     $(document).on("click", ".video-overlay", function (e) {

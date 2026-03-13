@@ -6,14 +6,14 @@
 <div class="video-list">
   {% for video in videos %}
     <div class="video-wrapper">
-      <video class="video-thumb" data-album-id="{{ video.video.id }}" preload="metadata" playsinline>
-        <source src="{{ video.video.url }}#t=1" type="video/mp4" />
+      <video class="video-thumb" data-video-id="{{ video.id }}" preload="metadata" playsinline>
+        <source src="{{ video.video.url }}#t=1" />
       </video>
       <div class="dropdown-area dropdown dropdown-menu-end">
         <button class="btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" onclick="event.stopPropagation()"></button>
         <ul class="dropdown-menu" style="min-width: 50px;" aria-labelledby="dropdownMenuButton">
           <li>
-            <button class="dropdown-item btn-viewdetails">详情</button>
+            <a class="dropdown-item" href="{% url 'main:download-video' video.id %}">下载</a>
           </li>
           <li>
             <a class="dropdown-item" href="{% url 'main:delete-video' %}?video_id={{video.id}} ">删除</a>
@@ -23,7 +23,7 @@
       <div class="overlay video-overlay">
         <div class="video-container d-flex justify-content-center align-items-center">
           <video class="overlay-video" style="max-width: 800px;aspect-ratio: 16/9;object-fit: contain;" data-video-id="{{ video.video.id }}" preload="metadata" controls>
-            <source src="{{ video.video.url }}" type="video/mp4" />
+            <source src="{{ video.video.url }}" />
           </video>
           <div class="video-info-wrapper">
             <div class="video-info">

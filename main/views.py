@@ -1,5 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
+import mimetypes
+import os
+
+from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,6 +16,22 @@ from .forms import *
 
 
 # Create your views here.
+
+
+def _is_image_file(uploaded_file):
+    mime = (uploaded_file.content_type or "").lower()
+    if mime.startswith("image/"):
+        return True
+    _, ext = os.path.splitext(uploaded_file.name.lower())
+    return ext in {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg"}
+
+
+def _is_video_file(uploaded_file):
+    mime = (uploaded_file.content_type or "").lower()
+    if mime.startswith("video/"):
+        return True
+    _, ext = os.path.splitext(uploaded_file.name.lower())
+    return ext in {".mp4", ".mov", ".avi", ".mkv", ".webm", ".m4v"}
 
 
 def _login(request):
@@ -81,54 +100,61 @@ def create_album(request):
 
 @login_required(login_url="/login/")
 def album(request, album_id):
-    album = Album.objects.get(host=request.user, id=album_id)
+    album = get_object_or_404(Album, host=request.user, id=album_id)
     if request.method == "POST":
-        pic_upload_form = PictureForm(request.POST, request.FILES)
-        # print(request.FILES)
-        if True:
-            images = request.FILES.getlist("image[]")
-            print(f"images={images}")
-            for file in images:
-                mime = file.content_type
-                if mime.startswith("image"):
-                    picture = Picture(
-                        name=file.name,
-                        description="",
-                        image=file,
-                        album=album,
-                    )
-                    picture.save()
-                elif mime.startswith("video"):
-                    video = Video(
-                        name=file.name,
-                        description="",
-                        video=file,
-                        album=album,
-                    )
-                    video.save()
-            return JsonResponse(
-                {
-                    "success": True,
-                    "redirect_url": reverse("main:albums", args=[album.id]),
-                }
-            )
-        else:
-            print(f"invalid form")
-            return HttpResponse("Upload fail: invalid form")
+        media_files = request.FILES.getlist("media[]") or request.FILES.getlist("image[]")
+        if not media_files:
+            return JsonResponse({"success": False, "message": "未选择文件"}, status=400)
+
+        uploaded_images = 0
+        uploaded_videos = 0
+        ignored_files = []
+
+        for media_file in media_files:
+            if _is_image_file(media_file):
+                Picture.objects.create(
+                    name=media_file.name,
+                    description="",
+                    image=media_file,
+                    album=album,
+                )
+                uploaded_images += 1
+            elif _is_video_file(media_file):
+                Video.objects.create(
+                    name=media_file.name,
+                    description="",
+                    video=media_file,
+                    album=album,
+                )
+                uploaded_videos += 1
+            else:
+                ignored_files.append(media_file.name)
+
+        return JsonResponse(
+            {
+                "success": uploaded_images + uploaded_videos > 0,
+                "uploaded_images": uploaded_images,
+                "uploaded_videos": uploaded_videos,
+                "ignored_files": ignored_files,
+                "redirect_url": reverse("main:albums", args=[album.id]),
+            }
+        )
+
     search = request.GET.get("search")
     if search:
         pictures = (
-            Picture.objects.filter(album=album, tag=search)
+            Picture.objects.filter(album=album, tag__name=search)
             .exclude(picture_type="default_cover")
             .order_by("-uploaded_at")
         )
+        videos = Video.objects.filter(album=album, tag__name=search).order_by("-uploaded_at")
     else:
         pictures = (
             Picture.objects.filter(album=album)
             .exclude(picture_type="default_cover")
             .order_by("-uploaded_at")
         )
-        videos = Video.objects.filter(album=album, tag=search).order_by("-uploaded_at")
+        videos = Video.objects.filter(album=album).order_by("-uploaded_at")
     for p in pictures:
         p.media_type = "image"
         p.created_at = p.uploaded_at
@@ -147,11 +173,7 @@ def album(request, album_id):
 @login_required(login_url="/login/")
 def delete_picture(request):
     picture_id = request.GET.get("picture")
-    # print(f"{picture_id}")
-    try:
-        picture = Picture.objects.get(id=picture_id)
-    except Exception as e:
-        return HttpResponse(f"Error: {e}")
+    picture = get_object_or_404(Picture, id=picture_id, album__host=request.user)
     picture.delete()
     referer_url = request.META.get("HTTP_REFERER", "/")
     return HttpResponseRedirect(referer_url)
@@ -162,11 +184,7 @@ def edit_album(request):
     if request.method == "POST":
         name = request.POST["name"]
         description = request.POST["description"]
-        print(f"{request}")
-        try:
-            album = Album.objects.get(id=request.GET.get("album"))
-        except Exception as e:
-            return HttpResponse(f"Error: {e}")
+        album = get_object_or_404(Album, id=request.GET.get("album"), host=request.user)
         album.name = name
         album.description = description
         album.save()
@@ -175,7 +193,7 @@ def edit_album(request):
 
 @login_required(login_url="/login/")
 def delete_album(request):
-    album = Album.objects.get(id=request.GET.get("album"))
+    album = get_object_or_404(Album, id=request.GET.get("album"), host=request.user)
     album.delete()
     return JsonResponse({"success": True})
 
@@ -229,7 +247,7 @@ def load_videos(request):
 def view_picture_modal(reqeust):
     picture_id = reqeust.GET.get("picture_id")
     try:
-        picture = Picture.objects.get(id=picture_id)
+        picture = Picture.objects.get(id=picture_id, album__host=reqeust.user)
         return JsonResponse(
             {
                 "picture": {
@@ -249,14 +267,15 @@ def view_picture_modal(reqeust):
 def view_picture_detail(request):
     picture_id = request.GET.get("picture_id")
     try:
-        picture = Picture.objects.get(id=picture_id)
+        picture = Picture.objects.get(id=picture_id, album__host=request.user)
     except Exception as e:
         return JsonResponse({"error": f"{e}"})
     if request.method == "POST":
         description = request.POST["description"]
         picture.description = description
-        tags = [name.strip() for name in request.POST["tag"].split(",") if name.strip()]
-        # print(f"tag={tag}")
+        tags = [name.strip() for name in request.POST.get("tag", "").split(",") if name.strip()]
+
+        picture.tag.clear()
         for tag in tags:
             t, created = Tag.objects.get_or_create(name=tag)
             picture.tag.add(t)
@@ -276,19 +295,17 @@ def view_picture_detail(request):
 
 @login_required(login_url="/login/")
 def search(request):
-    print(f"{request.GET}")
     q = request.GET.get("q")
     album_id = request.GET.get("album_id")
-    album = Album.objects.filter(id=album_id).first()
+    album = Album.objects.filter(id=album_id, host=request.user).first()
     if q is None:
         return HttpResponse("No query")
     if q[0] == "#":
         tag = q[1:]
         if album is not None:
             pictures = Picture.objects.filter(album=album, tag__name=tag)
-            print(f"album search: {pictures}")
         else:
-            pictures = Picture.objects.filter(tag__name=tag)
+            pictures = Picture.objects.filter(tag__name=tag, album__host=request.user)
         context = {"pictures": pictures, "pictures_count": len(pictures), }
         return render(request, "main/images_list.html", context)
     return HttpResponse(f"Not found: {q}")
@@ -297,6 +314,36 @@ def search(request):
 @login_required(login_url="/login/")
 def delete_video(request):
     video_id = request.GET.get("video_id")
-    video = Video.objects.get(id=video_id)
+    video = get_object_or_404(Video, id=video_id, album__host=request.user)
     video.delete()
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required(login_url="/login/")
+def download_picture(request, picture_id):
+    picture = get_object_or_404(Picture, id=picture_id, album__host=request.user)
+    if not picture.image:
+        raise Http404("图片不存在")
+    content_type, _ = mimetypes.guess_type(picture.image.name)
+    response = FileResponse(
+        picture.image.open("rb"),
+        as_attachment=True,
+        filename=picture.name or os.path.basename(picture.image.name),
+        content_type=content_type or "application/octet-stream",
+    )
+    return response
+
+
+@login_required(login_url="/login/")
+def download_video(request, video_id):
+    video = get_object_or_404(Video, id=video_id, album__host=request.user)
+    if not video.video:
+        raise Http404("视频不存在")
+    content_type, _ = mimetypes.guess_type(video.video.name)
+    response = FileResponse(
+        video.video.open("rb"),
+        as_attachment=True,
+        filename=video.name or os.path.basename(video.video.name),
+        content_type=content_type or "application/octet-stream",
+    )
+    return response

@@ -15,6 +15,9 @@
               <button class="dropdown-item btn-viewdetails" data-picture-id="{{ picture.id }}">详情</button>
             </li>
             <li>
+              <a class="dropdown-item" href="{% url 'main:download-picture' picture.id %}">下载</a>
+            </li>
+            <li>
               <a class="dropdown-item" href="{% url 'main:delete-picture' %}?picture={{ picture.id }}">删除</a>
             </li>
           </ul>

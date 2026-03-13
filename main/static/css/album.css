@@ -384,16 +384,74 @@
     margin: 0 5px 0 0;
 }
 
-.picture-tag-wrapper .btn-add-tag {
+.picture-tag-wrapper .tag-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.picture-tag-wrapper .tag-scroll-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.picture-tag-wrapper .tag-scroll-area .tag-link {
+    display: inline-block;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.picture-tag-wrapper .btn-add-tag,
+.picture-tag-wrapper .btn-edit-tag {
     border: none;
     background-color: transparent;
     color: #8491a5;
     font-size: 14px;
+    flex: 0 0 auto;
 }
 
 .picture-tag-wrapper .add-tag {
-    width: 100%;
+    width: 140px;
+    min-width: 100px;
+    padding: 2px 6px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
     display: none;
+    flex: 0 0 auto;
+}
+
+.tag-manager-list {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.tag-manager-item {
+    padding: 10px 12px;
+}
+
+.tag-manager-text {
+    color: #3b4c63;
+    font-size: 14px;
+}
+
+.tag-manager-empty {
+    color: #9ba6b5;
+    text-align: center;
+    padding: 20px 0;
 }
 
 .album-options {

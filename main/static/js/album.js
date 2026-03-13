@@ -83,16 +83,9 @@ $(document).ready(function () {
                     $("#upload-date").text((uploadDate.toLocaleString()));
                     $("#album").text(data.picture.belongs_to);
                     $("#detail-description").val(data.picture.description);
-                    let htmlTag = data.picture.tags.map(tag => {
-                        return $("<a></a>")
-                            .attr("href", "#")
-                            .addClass("tag-link")
-                            .text(`#${tag}`)
-                            .prop("outerHTML");
-                    }).join("") + '<button class="btn-add-tag" type="button" >添加</button>';
-                    // console.log("html tag: ", htmlTag);
                     $("#overlay-view-detail").show();
-                    $("#picture-tag").html(htmlTag);
+                    renderEditableTags(data.picture.tags || []);
+                    $("#input-add-tag").val("").hide();
                 } else {
                     console.log("No image found");
                 }
@@ -102,39 +95,116 @@ $(document).ready(function () {
 
     $(document).on("click", "#hide-details", function (e) {
         $("#overlay-view-detail").hide();
-        $("#input-add-tag").val("");
-        $("#input-add-tag").hide();
+        $("#overlay-tag-manager").hide();
+        const $tagInput = $("#input-add-tag");
+        $tagInput.val("");
+        $tagInput.hide();
+        $("#input-tag-values").val("");
     });
 
     $(document).on("click", ".btn-add-tag", function (e) {
-        console.log("click");
-        $("#input-add-tag").show();
+        e.stopPropagation();
+        const $btn = $(this);
+        const $tagInput = ensureTagInputExists();
+        const $tagArea = $("#picture-tag");
+
+        if ($tagArea.length > 0) {
+            $tagInput.appendTo($tagArea);
+            $tagInput.insertBefore($btn);
+        }
+
+        $tagInput.show().focus();
+    });
+
+    $(document).on("keydown", "#input-add-tag", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            commitPendingTags();
+        }
+    });
+
+    $(document).on("blur", "#input-add-tag", function () {
+        commitPendingTags();
+    });
+
+    $(document).on("click", function (e) {
+        if (!$("#overlay-view-detail").is(":visible")) {
+            return;
+        }
+        const isInTagEditor = $(e.target).closest("#picture-tag, #input-add-tag, .btn-add-tag").length > 0;
+        if (!isInTagEditor) {
+            commitPendingTags();
+        }
+    });
+
+    $(document).on("submit", "#form-picture-detail", function (e) {
+        commitPendingTags();
+    });
+
+    $(document).on("click", ".btn-edit-tag", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        commitPendingTags();
+        renderTagManager(getCurrentTags());
+        $("#overlay-tag-manager").show();
+    });
+
+    $(document).on("click", "#btn-close-tag-manager", function () {
+        $("#overlay-tag-manager").hide();
+    });
+
+    $(document).on("click", "#overlay-tag-manager", function (e) {
+        if (!$(e.target).closest(".popup").length) {
+            $("#overlay-tag-manager").hide();
+        }
+    });
+
+    $(document).on("click", ".btn-remove-tag-item", function (e) {
+        e.preventDefault();
+        const tagName = ($(this).attr("data-tag-name") || "").trim();
+        if (!tagName) {
+            return;
+        }
+
+        const remained = getCurrentTags().filter(function (name) {
+            return name !== tagName;
+        });
+        renderEditableTags(remained);
+        renderTagManager(remained);
     });
 
     $("#btn-upload-single-img").click(function (e) {
         $("#upload-single-image").click();
     });
 
-    let imgFiles = [];
+    let mediaFiles = [];
     $("#upload-single-image").change(function () {
         let files = this.files;
         if (files.length === 0) return;
         for (let i = 0; i < files.length; i++) {
-            let fileIndex = imgFiles.length;
+            let fileIndex = mediaFiles.length;
             let file = files[i];
             if (file) {
-                imgFiles.push(file);
-                let reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = function () {
-                    // $("#img-item").attr("src", this.result);
-                    // $(".img-item").show();
-                    let $imgItemWrapper = createImageItemWrapper(fileIndex);
-                    $(".upload-box").before($imgItemWrapper);
-                    $imgItemWrapper.find("img").attr("src", this.result);
-                    // console.log($imgItemWrapper);
-                    $imgItemWrapper.show();
+                mediaFiles.push(file);
+                let $mediaItemWrapper = createMediaItemWrapper(fileIndex, file);
+                $(".upload-box").before($mediaItemWrapper);
+
+                if (isImageFile(file)) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onloadend = function () {
+                        $mediaItemWrapper.find("img").attr("src", this.result);
+                    }
+                } else {
+                    let objectUrl = URL.createObjectURL(file);
+                    let $video = $mediaItemWrapper.find("video");
+                    $video.attr("src", objectUrl);
+                    $video.on("loadeddata", function () {
+                        URL.revokeObjectURL(objectUrl);
+                    });
                 }
+
+                $mediaItemWrapper.show();
             }
         }
         $(this).val("");
@@ -164,10 +234,9 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".btn-delete-img-item", function (e) {
-        // alert("Delete image item");
         let wrapperId = $(this).attr("id").split("-").pop();
         let index = $("#img-wrapper-" + wrapperId).data("index");
-        imgFiles.splice(index, 1);
+        mediaFiles.splice(index, 1);
         $(".img-item").each(function (i) {
             $(this).attr("data-index", i);
         });
@@ -175,13 +244,13 @@ $(document).ready(function () {
     });
 
     $("#btn-upload-image").click(function (e) {
-        if (imgFiles.length === 0) {
-            alert("请选择图片");
+        if (mediaFiles.length === 0) {
+            alert("请选择文件");
             return;
         }
         let formData = new FormData();
-        imgFiles.forEach(file => {
-            formData.append("image[]", file);
+        mediaFiles.forEach(file => {
+            formData.append("media[]", file);
         });
         $.ajax({
             url: "",
@@ -193,10 +262,12 @@ $(document).ready(function () {
             success: function (data) {
                 console.log(data);
                 if (data.success) {
-                    // alert("上传成功");
+                    if (data.ignored_files && data.ignored_files.length > 0) {
+                        alert("以下文件类型不支持，已忽略: " + data.ignored_files.join(", "));
+                    }
                     window.location.href = data.redirect_url;
                 } else {
-                    alert("上传失败");
+                    alert(data.message || "上传失败");
                 }
             },
             error: function (error) {
@@ -233,20 +304,138 @@ function hidePopup(params) {
     $("#overlay").hide();
 }
 
-function createImageItemWrapper(index) {
+function getCurrentTags() {
+    let tags = [];
+    $("#picture-tag .tag-link").each(function () {
+        const raw = ($(this).text() || "").trim();
+        if (!raw) return;
+        const tagName = raw.startsWith("#") ? raw.slice(1) : raw;
+        if (tagName) {
+            tags.push(tagName);
+        }
+    });
+    return tags;
+}
+
+function renderEditableTags(tags) {
+    const uniqTags = [];
+    const seen = new Set();
+    tags.forEach(function (tag) {
+        const t = (tag || "").trim();
+        if (!t) return;
+        if (!seen.has(t)) {
+            seen.add(t);
+            uniqTags.push(t);
+        }
+    });
+
+    const $tagArea = $("#picture-tag");
+    const $tagInput = ensureTagInputExists().detach();
+    $tagArea.empty();
+    const $tagScrollArea = $('<div class="tag-scroll-area"></div>');
+
+    uniqTags.forEach(function (tag) {
+        const $tagChip = $("<a></a>")
+            .attr("href", "#")
+            .addClass("tag-link")
+            .text(`#${tag}`);
+        $tagScrollArea.append($tagChip);
+    });
+
+    const $addBtn = $('<button class="btn-add-tag" type="button">添加</button>');
+    const $editBtn = $('<button class="btn-add-tag btn-edit-tag" type="button">编辑</button>');
+    $tagScrollArea.append($tagInput.hide());
+    $tagArea.append($tagScrollArea);
+    $tagArea.append($addBtn);
+    $tagArea.append($editBtn);
+
+    $("#input-tag-values").val(uniqTags.join(","));
+}
+
+function ensureTagInputExists() {
+    let $tagInput = $("#input-add-tag");
+    if ($tagInput.length === 0) {
+        $tagInput = $('<input class="add-tag" id="input-add-tag" type="text" />');
+        $("#picture-tag").append($tagInput);
+    }
+    return $tagInput;
+}
+
+function commitPendingTags() {
+    const $tagInput = $("#input-add-tag");
+    const pending = ($tagInput.val() || "").trim();
+    if (!pending) {
+        $tagInput.hide();
+        return;
+    }
+
+    const currentTags = getCurrentTags();
+    const pendingTags = pending.split(",").map(function (v) {
+        return v.trim();
+    }).filter(Boolean);
+    renderEditableTags(currentTags.concat(pendingTags));
+
+    $tagInput.val("").hide();
+}
+
+function renderTagManager(tags) {
+    const $list = $("#tag-manager-list");
+    if ($list.length === 0) {
+        return;
+    }
+
+    $list.empty();
+    if (!tags || tags.length === 0) {
+        $list.append('<div class="tag-manager-empty">暂无标签</div>');
+        return;
+    }
+
+    tags.forEach(function (tag) {
+        const $item = $('<div class="list-group-item tag-manager-item d-flex justify-content-between align-items-center"></div>');
+        const $text = $('<span class="tag-manager-text"></span>').text(tag);
+        const $remove = $('<button type="button" class="btn btn-outline-danger btn-sm btn-remove-tag-item">删除</button>').attr("data-tag-name", tag);
+        $item.append($text, $remove);
+        $list.append($item);
+    });
+}
+
+function isImageFile(file) {
+    return file.type && file.type.startsWith("image/");
+}
+
+function createMediaItemWrapper(index, file) {
     let uniqueId = Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
     let $wrapper = $("<div>").addClass("img-item").attr("id", "img-wrapper-" + uniqueId).attr("data-index", index).css({
         "position": "relative",
         "margin-bottom": "10px"
     });
-    let $img = $("<img>").attr("src", "#").css({
-        "width": "100%",
-        "height": "125px",
-        "object-fit": "contain"
+    let $previewNode;
+    if (isImageFile(file)) {
+        $previewNode = $("<img>").attr("src", "#").css({
+            "width": "100%",
+            "height": "125px",
+            "object-fit": "contain"
+        });
+    } else {
+        $previewNode = $("<video>").prop("muted", true).attr("preload", "metadata").attr("playsinline", true).attr("controls", true).css({
+            "width": "100%",
+            "height": "125px",
+            "object-fit": "contain",
+            "background-color": "#111"
+        });
+    }
+
+    let $filename = $("<div>").text(file.name).css({
+        "font-size": "12px",
+        "color": "#666",
+        "padding": "0 6px",
+        "overflow": "hidden",
+        "text-overflow": "ellipsis",
+        "white-space": "nowrap"
     });
+
     let $button = $("<button>", {
         class: 'd-flex align-items-center justify-content-center btn-delete-img-item',
-        // id: 'btn-deleteimg',
         type: 'button',
         id: "btn-deleteImgItem-" + uniqueId,
         css: {
@@ -262,15 +451,7 @@ function createImageItemWrapper(index) {
             <path d="M400.660873 667.834782c12.298799 0 22.297822-10.099014 22.297822-22.297823V378.463041c0-12.198809-10.099014-22.197832-22.297822-22.297823-12.298799 0-22.297822 10.099014-22.297823 22.297823v267.073918c0 12.298799 10.099014 22.297822 22.297823 22.297823zM623.239137 667.834782c12.298799 0 22.297822-10.099014 22.297822-22.297823V378.463041c0-12.198809-10.099014-22.197832-22.297822-22.297823-12.298799 0-22.297822 10.099014-22.297823 22.297823v267.073918c0 12.298799 10.099014 22.297822 22.297823 22.297823z" fill="" p-id="2777"></path>
         </svg>
         `);
-    // let $input = $("<input>", {
-    //     css: {
-    //         display: "none"
-    //     },
-    //     name: "image",
-    //     type: "file",
-    //     accept: "image/*",
-    // })
     $button.append($svg);
-    $wrapper.append($img, $button);
+    $wrapper.append($previewNode, $filename, $button);
     return $wrapper;
 }
